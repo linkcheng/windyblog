@@ -1,0 +1,182 @@
+Ubuntu 配置 Samba服务器手顺
+
+Samba是一个允许用户通过网络共享文件、文档和打印机的软件包，无论是在Linux、Windows，还是Mac上。它适用于所有的主流平台，可以在所有支持系统上流畅运行。
+下面是维基百科的介绍：
+Samba是一款重新实现SMB/CIFS网络协议的自由软件，最初由安德鲁·垂鸠开发。在第三版中，Smaba不仅支持通过不同的Windows客户端访问及分享SMB的文件夹及打印机，还可以集成到Windows Server域，作为主域控制器（PDC）或者域成员。它也可以作为活动目录域的一部分。
+
+
+1.图形界面配置：
+在软件中心搜索Samba，进行安装。
+
+首先进入编辑Samba共享，包括基本与访问两部分。
+其中基本有：目录，也就是需要共享的目录；共享名：访问者看到的目录名称;描述：对共享目录的描述；以及读写权限的限定。
+其中访问包括：只允许指定用户访问与允许所有用户访问。指定用户访问需要事先在首选项中添加用户。
+
+关于首选项中添加用户：
+直接创建新Samba用户即可，包括unix用户名，Windows用户名，Samba密码以及确认Samba密码。unix用户名必须为当前已经被创建过的用户。
+
+关于首选项中Samba服务器配置：
+包括基本与安全性.基本包括工作组：即当前电脑坐在的工作组，一般默认为workgroup。描述：可以忽略。
+安全性包括验证模式：一般使用用户与共享两种。用户为设置访客需要登录密码访问；共享则不需要密码。其他几种没有用过，不是很清楚。
+其他的在用户与共享两种迷失几乎不需要设置。
+
+
+2.配置文件配置：
+先更新系统以便安装任何可用的更新。
+sudo apt-get update && apt-get upgrade # 按照这条命令安装samba和少量所需的软件包：
+sudo apt-get install samba samba-common system-config-samba python-glade2 gksu # 并不知道为什么安装这么多，网上搜的，就照做了
+sudo apt-get install smbclient  # Linux客户端测试用
+sudo apt-get install samba cifs-utils # 这条命令将会安装Samba和其他相关的工具。
+
+配置文件位置：/etc/samba/smb.conf 
+建议备份原配置文件，sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.bak
+
+创建共享目录：
+sudo mkdir -p /home/share
+一般来说，该目录的权限为755，将其改为777之后，Owner之外的其他用户才有权限写入。
+sudo chmod 777 /home/share
+
+修改配置文件：
+sudo vim /etc/samba/smb.conf
+在[global]区域：
+workgroup = workgroup # 配置工作组
+security = user       # 配置验证模式，可以为share
+username map = /etc/samba/smbusers   # 配置用户验证的，一般默认就是这样
+
+在最后添加：
+[share]   # 该共享的共享名
+	comment = smb share test   # 该共享的备注
+	path = /home/share  # 共享路径
+	browseable = yes    # 设置该共享目录是否可显示
+	writable = yes      # 指定了这个目录缺省是否可写
+	valid user = smbuser   # 指定能够使用该共享资源的用户
+
+创建samba用户：
+注意，创建samba用户之前，必须先确保有一个同名的Linux用户，否则samba用户会创建失败。
+sudo smbpasswd -a smbuser
+之后按提示两次输入账户密码（也必须与Linux系统中对应账户的密码完全一样）后即完成新的Samba账户的创建。
+
+以上配置完成后，运行sudo restart smbd && sudo restart nmbd即可。也有用 sudo service smbd restart来重启Samba服务的。
+
+
+3.另外，总结一下常见的samba配置及说明：
+[share] # 该共享的共享名
+comment = smb share test # 该共享的备注
+path = /home/share # 共享路径
+allow hosts = host(subnet) # 设置该Samba服务器允许的工作组或者域
+deny hosts = host(subnet) # 设置该Samba服务器拒绝的工作组或者域
+available = yes|no # 设置该共享目录是否可用
+browseable = yes|no # 设置该共享目录是否可显示
+writable = yes|no # 指定了这个目录缺省是否可写，也可以用readonly = no来设置可写
+public = yes|no # 指明该共享资源是否能给游客帐号访问，guest ok = yes其实和public = yes是一样的
+user = user, @group # user设置所有可能使用该共享资源的用户，也可以用@group代表group这个组的所有成员，不同的项目之间用空格或者逗号隔开
+valid users = user, @group # 指定能够使用该共享资源的用户和组
+invalid users = user, @group # 指定不能够使用该共享资源的用户和组
+read list = user, @group # 指定只能读取该共享资源的用户和组
+write list = user, @group # 指定能读取和写该共享资源的用户和组
+admin list = user, @group # 指定能管理该共享资源（包括读写和权限赋予等）的用户和组
+hide dot files = yes|no # 指明是否像UNIX那样隐藏以“.”号开头的文件
+create mode = 0755 # 指明新建立的文件的属性，一般是0755
+directory mode = 0755 # 指明新建立的目录的属性，一般是0755
+sync always = yes|no # 指明对该共享资源进行写操作后是否进行同步操作
+short preserve case = yes|no # 指明是否区分文件名大小写
+preserve case = yes|no # 指明是否保持大小写
+case sensitive = yes|no # 指明是否对大小写敏感，一般选no，不然可能引起错误
+mangle case = yes|no # 指明混合大小写
+default case = upper|lower # 指明缺省的文件名是全部大写还是小写
+force user = testuser # 强制把建立文件的属主是谁。如果我有一个目录，让guest可以写，那么guest就可以删除，
+如果我用force user= estuser强制建立文件的属主是testuser，同时限制create mask = 0755
+
+
+4。硬插一段生产力工具配置，synergy配置
+Ubuntu与Windows下一定要版本匹配，不然会failed to connect to server.
+
+Ubuntu配置为server，进入configure server，把client拖拽到server的旁边，方向尽量与实机方位一直吧，方便区分。
+然后双击client电脑图标进行配置。
+screen name:要与client断配置的screen name一致。其他的就没有特殊配置的。
+windows配置为client，server ip配置为server的ip。进入setting，设置下screen name就行了。
+
+
+5.用户创建
+提示Failed to add entry for user的错误，需增加相应的系统账号test
+sudo groupadd test -g 6000
+sudo useradd test -u 6000 -g 6000 -s /sbin/nologin -d /dev/null
+
+这时就可以用smbpasswd -a test增加test这个samba账号了。
+为了增加系统的安全性，所以加的系统账号不要给shell它，也不给它指定目录。
+到时在/home目录给test账号建个文件夹，该文件夹只有test有读写权限即可!
+sudo mkdir /home/test
+sudo chown -R test:test /home/test
+
+若不想让另人访问，只让test用户可以访问，只需执行命令:
+sudo chmod u+rwx,g+rwx,o-rwx /home/test
+
+这时可以用smbpasswd命令增加samba账号test了
+sudo smbpasswd -a test
+New SMB password:
+Retype new SMB password:
+Added user test.
+
+
+6.自己遇到的坑
+配置完成sudo service smbd restart后，用windows连接不上Samba，但是Ubuntu可以。
+Windows提示：无法访问。您可能没有权限使用网络资源，请与这台服务器的管理员联系以查明您是否有访问权限。指定的网络名不再可用。
+
+然后就关闭selinux，关闭防火墙，然而并没有什么卵用。
+配置方法：
+关闭SELinux的方法：
+setenforce 0 
+修改/etc/selinux/config文件中的SELINUX="" 为 disabled ，然后重启。 #没用使用，不知道管不管用　
+如果不想重启系统，使用命令setenforce 0 
+注： setenforce 1 设置SELinux 成为enforcing模式 setenforce 0 设置SELinux 成为permissive模式 　
+在lilo或者grub的启动参数中增加：selinux=0,也可以关闭selinux
+查看selinux状态： /usr/bin/setstatus -v
+
+Ubuntu关闭防火墙
+iptables -F
+
+以下切实解决问题：
+首先查看samba的log，在/var/log/samba目录下，包含所用用户登录过的日志。
+根据电脑名称与时间筛选下，最后定位问题如下：
+
+[2016/07/18 13:12:44.889447,  0] ../source3/lib/util.c:801(smb_panic_s3)
+  smb_panic(): calling panic action [/usr/share/samba/panic-action 5145]
+[2016/07/18 13:12:44.891859,  0] ../source3/lib/util.c:809(smb_panic_s3)
+  smb_panic(): action returned status 0
+[2016/07/18 13:12:44.891935,  0] ../source3/lib/dumpcore.c:318(dump_core)
+  dumping core in /var/log/samba/cores/smbd
+[2016/07/18 13:12:45.007251,  0] ../source3/lib/popt_common.c:68(popt_s3_talloc_log_fn)
+  talloc: access after free error - first free may be at ../source3/smbd/open.c:3715
+[2016/07/18 13:12:45.007279,  0] ../source3/lib/popt_common.c:68(popt_s3_talloc_log_fn)
+  Bad talloc magic value - access after free
+[2016/07/18 13:12:45.007287,  0] ../source3/lib/util.c:789(smb_panic_s3)
+  PANIC (pid 5149): Bad talloc magic value - access after free
+[2016/07/18 13:12:45.007722,  0] ../source3/lib/util.c:900(log_stack_trace)
+
+尼玛一句都没看明白，然后搜了下smb_panic(): calling panic action，百度就可以，第一条就完美解决问题。
+执行：sudo apt-get install --reinstall libsmbclient libsmbclient-dev libtevent0 libtalloc2
+
+以下是回答全文：
+Try to use Samba on Ubuntu in the VirtulBox, access from Windows always failed,
+
+Check the Samba log:
+tail /var/log/samba/log.lenovo-xhl-pc
+Result as below (partially copy),
+../source3/lib/util.c:801(smb_panic_s3) smb_panic(): calling panic action
+
+This command resolved the problem,
+$ apt-get install --reinstall libsmbclient libsmbclient-dev libtevent0 libtalloc2
+
+It seems that the new samba package poorly specified the dependencies it needed, so require to re-install these library.
+
+Reference link:
+https://answers.launchpad.net/ubuntu/+question/291448
+
+以下是Reference link中的回答：
+I had this problem today after I installed samba-dbg to debug an issue. The whole thing just did not work and uninstalling samba-dbg did not fix the issue. What did fix the issue was running the following:
+
+ $ apt-get install --reinstall libsmbclient libsmbclient-dev libtevent0 libtalloc2
+
+I think there was a miss match of shared libraries with either tevent or talloc. After reinstalling all the libraries all was fixed.
+
+好吧，最后感慨一下，看log是最后的解决方法，log看不懂就网上搜一下。最后的最后，英语真的太TM重要了。
