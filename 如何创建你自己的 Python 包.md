@@ -1,8 +1,11 @@
 # 如何创建你自己的 Python 包
 
 title:  如何创建你自己的 Python 包
+
 author:  LinkCheng
+
 permalink: how-to-write-your-own-python-packages
+
 keywords: Python, Package Management
 
 ***
