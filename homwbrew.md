@@ -28,7 +28,7 @@
 `pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start`
 停止服务:
 `pg_ctl -D /usr/local/var/postgres stop -s -m fast`
-自动启动服务，9.4.0按需修改
+自动启动服务，9.4.0按需修改(9.5.4)
 `mkdir -p ~/Library/LaunchAgents`
 `cp /usr/local/Cellar/postgresql/9.4.0/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/`
 `launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist`
