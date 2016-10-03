@@ -47,9 +47,15 @@
 
 清除缓存可以使用environment对象的invalidate_all()方法进行
 
+**@api.multi**
 
+默认的装饰器是这个，没有自动迭代recordset，因为它默认接受的self就是recordset对象(所有recordset就是指相同模型下的所有对象，或者说同一SQL表格下的所有记录。)。
 
- ### 新API实例
+**@api.one**
+
+@api.one装饰器将会自动产生一个迭代动作，具体是指迭代某一recordset，然后其内的self就是一个record也就是该模型下SQL表格的一条记录。然后@api.one返回的是一个列表值，某些网络客户端可能并不支持这点。所以还是尽量少用@api.one。
+
+### 新API实例
 
 **search** 属性
 
@@ -96,7 +102,7 @@ def set_document(self):
 
     with open(record.get_document_path()) as f:
 
-    f.write(record.document)
+    	f.write(record.document)
 ```
 
 **related** 属性
@@ -352,4 +358,5 @@ r2=context.with_context(key2=value2)
 2. states     状态------字典映射状态值UI属性-值对列表；可能的属性是“只读”，“要求”，“看不见”。注：任何状态为基础的状态需要的状态字段值可在客户端的用户界面。这通常是通过包括它在相关的意见，可能是无形的，如果不相关的最终用户。
 3. groups   组------逗号分隔列表（字符串），这限制了给定的组的用户的字段访问
 4. copy (bool)    复制（bool）——该字段是否值应该复制记录时复制（默认：正常的字段为True，one2many未False）
+
 
