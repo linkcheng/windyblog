@@ -1,8 +1,8 @@
-OpenERP "objects" are usually called classes in object orientedprogramming.
+* OpenERP "objects" are usually called classes in object orientedprogramming.
 
 OpenERP 的“对象”，在面向对象编程中通常被称为类。
 
- A OpenERP "resource" is usually called an object in OO programming,instance of a class.
+* A OpenERP "resource" is usually called an object in OO programming,instance of a class.
 
 一个 OpenERP 的“资源”在面向对象编程中通常称为一个对象，一个类的实例。
 
