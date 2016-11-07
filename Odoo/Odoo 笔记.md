@@ -82,76 +82,88 @@ msgstr "金融机构识别码类型"
    ALTER TABLE "import_fields" DROP CONSTRAINT "import_fields_import_field_id_unique";
 ```
 
-12.   数据库查询 select语句：SELECT  * from table_name where id='id';
+12.    数据库查询 select语句：SELECT  * from table_name where id='id';
 
-13.   修改数据：
+13.    修改数据：
 
-     ```sql
-     UPDATE ir_translation SET value='员工标签' WHERE lang='zh_CN' and src='Categories' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='category_ids' and model='hr.employee');
-     ```
+       ```sql
+          UPDATE ir_translation SET value='员工标签' WHERE lang='zh_CN' and src='Categories' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='category_ids' and model='hr.employee');
+       ```
 
-14.   数据库左连接查询：
+14.    数据库左连接查询：
 
-     ```sql
-     """ SELECT fol.id,fol.res_model,fol.res_id FROM mail_followers fol LEFT JOIN mail_followers_mail_message_subtype_rel rel ON fol.id=rel.mail_followers_id WHERE rel.mail_message_subtype_id=%s AND fol.active=TRUE AND fol.partner_id=%s AND fol.write_date <= %s""" % (attention_id, partner_id, deadline_date)
-     ```
+       ```sql
+          """ SELECT fol.id,fol.res_model,fol.res_id FROM mail_followers fol LEFT JOIN mail_followers_mail_message_subtype_rel rel ON fol.id=rel.mail_followers_id WHERE rel.mail_message_subtype_id=%s AND fol.active=TRUE AND fol.partner_id=%s AND fol.write_date <= %s""" % (attention_id, partner_id, deadline_date)
+       ```
 
-15.   write 方法重写：
+15.    write 方法重写：
 
-     ```python
-     @api.one
-     def write(self, val):
-         result = super(all_form_design_menu, self).write(val)
-         if self.menu_id:
-             menu_var = self.env['ir.ui.menu'].browse(self.menu_id.id)
-             menu_var.write({'name': self.name})
-             return result
-     ```
+       ```python
+          @api.one
+          def write(self, val):
+              result = super(all_form_design_menu, self).write(val)
+              if self.menu_id:
+                  menu_var = self.env['ir.ui.menu'].browse(self.menu_id.id)
+                  menu_var.write({'name': self.name})
+                  return result
+       ```
 
-16.   添加 function tool，在 debug 模式下，添加 function tool item，model 为 all.form.design，类型为 method，方法名称为：add_state_change_date_field
+16.    添加 function tool，在 debug 模式下，添加 function tool item，model 为 all.form.design，类型为 method，方法名称为：add_state_change_date_field
 
-     ```python
-     @api.model
-     def add_state_change_date_field(self):
-         # 用来处理旧的e表单数据没有说明字段的问题
-         form_design_objs = self.env['all.form.design'].search([])
-         for form_design_obj in form_design_objs:
-             has_state_change_date = filter(lambda x: x.name in ['state_change_date'], form_design_obj.ir_model_id.field_id)  # TODO 最好用sql?
-                 if not has_state_change_date:
-                     query = 'alter table %s add state_change_date date;' % form_design_obj.ir_model_id.model
-                     self._cr.execute(query)
-     ```
+       ```python
+          @api.model
+          def add_state_change_date_field(self):
+              # 用来处理旧的e表单数据没有说明字段的问题
+              form_design_objs = self.env['all.form.design'].search([])
+              for form_design_obj in form_design_objs:
+                  has_state_change_date = filter(lambda x: x.name in ['state_change_date'], form_design_obj.ir_model_id.field_id)  # TODO 最好用sql?
+                      if not has_state_change_date:
+                          query = 'alter table %s add state_change_date date;' % form_design_obj.ir_model_id.model
+                          self._cr.execute(query)
+       ```
 
-     ```xml
-     <?xml version="1.0" encoding="UTF-8"?>
-     <openerp>
-         <data noupdate="1">
-             <record id="all_form_design_func" model="function_tool">
-                 <field name="model">all.form.design</field>
-                 <field name="table">all_form_design</field>
-                 <field name="method">add_state_change_date_field</field>
-                 <field name="type">method</field>
-             </record>
-         </data>
-     </openerp>
-     ```
+       ```xml
+          <?xml version="1.0" encoding="UTF-8"?>
+          <openerp>
+              <data noupdate="1">
+                  <record id="all_form_design_func" model="function_tool">
+                      <field name="model">all.form.design</field>
+                      <field name="table">all_form_design</field>
+                      <field name="method">add_state_change_date_field</field>
+                      <field name="type">method</field>
+                  </record>
+              </data>
+          </openerp>
+       ```
 
-17.   旧API接口调用新API接口函数，需要补齐 **cr, uid, context=None** 三个参数
+17.    旧API接口调用新API接口函数，需要补齐 **cr, uid, context=None** 三个参数
 
-18.   self.ensure_one()
+18.    self.ensure_one()
 
-     ```python
-     """checks that the recordset is a singleton (only contains a single record), raises an error otherwise:"""
-     records.ensure_one()
-     # is equivalent to but clearer than:
-     assert len(records) == 1, "Expected singleton"
-     ```
+       ```python
+          """checks that the recordset is a singleton (only contains a single record), raises an error otherwise:"""
+          records.ensure_one()
+          # is equivalent to but clearer than:
+          assert len(records) == 1, "Expected singleton"
+       ```
 
-19.   确保入参是 list 类型
+19.    确保入参是 list 类型
 
-     ```python
-     if isinstance(ids, (int,long)): 
-     	ids = [ids]
-     ```
+       ```python
+          if isinstance(ids, (int,long)): 
+          	ids = [ids]
+       ```
 
-     ​
+20.    Odoo 对象成员赋值 （=）时会调用 write 方法，可以通过中间变量代替：
+
+         ```
+         instance = self.env[attention['res_model']].browse(attention['res_id'])
+         # instance.state_change_date = instance.write_date ， 修改为以下代码
+         instance_state_change_date = instance.state_change_date
+         if not instance_state_change_date:
+         	instance_state_change_date = instance.write_date
+         ```
+
+21.    手动调用 query = 'alter table x_fx__2016_0015 add x_state_change_date date;' 与 self.env['ir.model.fields'].create(vals) 方式添加一列与一个字段，列名称（字段名称）必须以 **x_** 开头。
+
+22.    翻译问题，比如动态model名称，_(‘Description’) 类型，可以通过导出po文件查看，然后进行修改。
