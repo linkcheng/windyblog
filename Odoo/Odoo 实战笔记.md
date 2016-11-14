@@ -310,3 +310,67 @@ WHERE dep.id IN
 > LEFT JOIN 是左连接；
 
 LEFT JOIN 关键字会从左表 (hr_department) 那里返回所有的行，即使在右表 (hr_employee) 中没有匹配的行。在某些数据库中， LEFT JOIN 称为 LEFT OUTER JOIN。
+
+28. function 字段
+
+```python
+def _get_department_num(self, cr, uid, ids, name, args, context=None):
+    res = {}
+    for id in ids:
+        department_ids = self.search(cr, SUPERUSER_ID, [('parent_id', 'child_of', id)])
+        employee_num = self.pool.get('hr.employee').search_count(cr, SUPERUSER_ID, [('department_id', 'in', department_ids), ('work_activity', '=', 'in_service')])
+        res[id] = employee_num
+        return res
+
+def _get_all_department_ids(self, cr, uid, ids, context=None):
+    # 一个员工部门发生变化时，重新计算所有部门的员工数
+    # 一个部门name发生变化时，重新计算所有部门的display_name
+    return self.pool.get('hr.department').search(cr, SUPERUSER_ID, [])
+
+'now_num': fields.function(_get_department_num, string="No. of Employee", store={
+    'hr.employee': (_get_all_department_ids, ['department_id', 'active', 'work_activity'], 10),
+    'hr.department': (_get_all_department_ids, ['name', 'parent_id'], 10),
+}, type='integer'),
+```
+
+> 当 'hr.employee' 的 'department_id', 'active', 'work_activity' 字段发生变化时，触发**_get_all_department_ids** 函数，发返回值返回给 **_get_department_num** 作为参数，此处返回 ids。
+
+29. @api.onchange() 说明
+
+```python
+@api.onchange('end_date')
+def on_change_end_date(self):
+    '''
+        当 end_date 变更时调用
+        :param end_date: 组织单元有效期止
+        :param now_num: 组织单元下员工数
+        :return: 如果 end_date 设置为未来的一个定值，并且该组织单元下有员工，raise warning，
+        '''
+
+    today = datetime.now().strftime('%Y-%m-%d')
+    if self.end_date and self.end_date > today:
+        if self.now_num != 0:
+            raise osv.except_osv(_('Warning'), _('There are employees assigned to this org unit ,please adjust before the org unit gets expired.'))
+
+     # return {'domain': {'child_source_id': [('partner_parent_id', '=', self.source_id.id)]},}
+```
+
+> @api.onchange 装饰的函数通常没有返回值，如果有应该为 {‘domain’：{}}
+>
+> on_change_end_date 的参数应该只为 self
+
+30. 新 API compute 
+
+```python
+@api.depends('start_date', 'end_date')
+    def _compute_is_in_use(self):
+        '''
+        根据 start_date end_date 计算 is_in_use
+        :return:
+        '''
+        self.is_in_use = self.is_department_in_use(self.start_date, self.end_date)
+
+    # is_in_use 表示是否在使用，根据 today 是否在 [start_date, end_date] 中而得，in，为 True， 否则 False
+is_in_use = fields_new.Boolean('In Use', compute='_compute_is_in_use', store=True)
+```
+
