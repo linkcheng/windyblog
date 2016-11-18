@@ -85,61 +85,61 @@ msgstr "金融机构识别码类型"
 13.    修改数据：
 
        ```sql
-                UPDATE ir_translation SET value='员工标签' WHERE lang='zh_CN' and src='Categories' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='category_ids' and model='hr.employee');
+                         UPDATE ir_translation SET value='员工标签' WHERE lang='zh_CN' and src='Categories' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='category_ids' and model='hr.employee');
        ```
 
 14.    数据库左连接查询：
 
        ```sql
-                """ SELECT fol.id,fol.res_model,fol.res_id FROM mail_followers fol LEFT JOIN mail_followers_mail_message_subtype_rel rel ON fol.id=rel.mail_followers_id WHERE rel.mail_message_subtype_id=%s AND fol.active=TRUE AND fol.partner_id=%s AND fol.write_date <= %s""" % (attention_id, partner_id, deadline_date)
+                         """ SELECT fol.id,fol.res_model,fol.res_id FROM mail_followers fol LEFT JOIN mail_followers_mail_message_subtype_rel rel ON fol.id=rel.mail_followers_id WHERE rel.mail_message_subtype_id=%s AND fol.active=TRUE AND fol.partner_id=%s AND fol.write_date <= %s""" % (attention_id, partner_id, deadline_date)
        ```
 
 15.    write 方法重写：
 
        ```python
-          @api.one
-          def write(self, val):
-              result = super(all_form_design_menu, self).write(val)
-              if self.menu_id:
-                  menu_var = self.env['ir.ui.menu'].browse(self.menu_id.id)
-                  menu_var.write({'name': self.name})
-                  return result
+                   @api.one
+                   def write(self, val):
+                       result = super(all_form_design_menu, self).write(val)
+                       if self.menu_id:
+                           menu_var = self.env['ir.ui.menu'].browse(self.menu_id.id)
+                           menu_var.write({'name': self.name})
+                           return result
        ```
 
 16.    添加 function tool，在 debug 模式下，添加 function tool item，model 为 all.form.design，类型为 method，方法名称为：add_state_change_date_field
 
        ```python
-          @api.model
-          def add_state_change_date_field(self):
-              # 用来处理旧的e表单数据没有x_state_change_date字段的问题；需要添加列也需要添加字段
-              form_design_objs = self.env['all.form.design'].search([])
-              for form_design_obj in form_design_objs:
-                  has_state_change_date = filter(lambda x: x.name in ['x_state_change_date'], 					form_design_obj.ir_model_id.field_id)
-                  if not has_state_change_date:
-                      query = 'alter table %s add x_state_change_date date;' % 										form_design_obj.ir_model_id.model
-                      self._cr.execute(query)
-                      vals = {
-                          'model': form_design_obj.ir_model_id.model,
-                          'model_id': form_design_obj.ir_model_id.id,
-                          'name': 'x_state_change_date',
-                          'ttype': 'date',
-                          'field_description': _('Date of state change'),
-                      }
-                      self.env['ir.model.fields'].create(vals)
+                   @api.model
+                   def add_state_change_date_field(self):
+                       # 用来处理旧的e表单数据没有x_state_change_date字段的问题；需要添加列也需要添加字段
+                       form_design_objs = self.env['all.form.design'].search([])
+                       for form_design_obj in form_design_objs:
+                           has_state_change_date = filter(lambda x: x.name in ['x_state_change_date'], 					form_design_obj.ir_model_id.field_id)
+                           if not has_state_change_date:
+                               query = 'alter table %s add x_state_change_date date;' % 										form_design_obj.ir_model_id.model
+                               self._cr.execute(query)
+                               vals = {
+                                   'model': form_design_obj.ir_model_id.model,
+                                   'model_id': form_design_obj.ir_model_id.id,
+                                   'name': 'x_state_change_date',
+                                   'ttype': 'date',
+                                   'field_description': _('Date of state change'),
+                               }
+                               self.env['ir.model.fields'].create(vals)
        ```
 
        ```xml
-          <?xml version="1.0" encoding="UTF-8"?>
-          <openerp>
-            <data noupdate="1">
-              <record id="all_form_design_func" model="function_tool">
-                <field name="model">all.form.design</field>
-                <field name="table">all_form_design</field>
-                <field name="method">add_state_change_date_field</field>
-                <field name="type">method</field>
-              </record>
-            </data>
-          </openerp>
+                   <?xml version="1.0" encoding="UTF-8"?>
+                   <openerp>
+                     <data noupdate="1">
+                       <record id="all_form_design_func" model="function_tool">
+                         <field name="model">all.form.design</field>
+                         <field name="table">all_form_design</field>
+                         <field name="method">add_state_change_date_field</field>
+                         <field name="type">method</field>
+                       </record>
+                     </data>
+                   </openerp>
        ```
 
 17.    旧API接口调用新API接口函数，需要补齐 **cr, uid, context=None** 三个参数
@@ -147,27 +147,27 @@ msgstr "金融机构识别码类型"
 18.    self.ensure_one()
 
        ```python
-          """checks that the recordset is a singleton (only contains a single record), raises an error otherwise:"""
-          records.ensure_one()
-          # is equivalent to but clearer than:
-          assert len(records) == 1, "Expected singleton"
+                   """checks that the recordset is a singleton (only contains a single record), raises an error otherwise:"""
+                   records.ensure_one()
+                   # is equivalent to but clearer than:
+                   assert len(records) == 1, "Expected singleton"
        ```
 
 19.    确保入参是 list 类型
 
        ```python
-          if isinstance(ids, (int,long)): 
-              ids = [ids]
+                   if isinstance(ids, (int,long)): 
+                       ids = [ids]
        ```
 
 20.    Odoo 对象成员赋值 （=）时会调用 write 方法，可以通过中间变量代替：
 
        ```python
-          instance = self.env[attention['res_model']].browse(attention['res_id'])
-          # instance.state_change_date = instance.write_date ， 修改为以下代码
-          instance_state_change_date = instance.state_change_date
-          if not instance_state_change_date:
-              instance_state_change_date = instance.write_date
+                   instance = self.env[attention['res_model']].browse(attention['res_id'])
+                   # instance.state_change_date = instance.write_date ， 修改为以下代码
+                   instance_state_change_date = instance.state_change_date
+                   if not instance_state_change_date:
+                       instance_state_change_date = instance.write_date
        ```
 
 21.    手动调用 query = 'alter table x_fx__2016_0015 add x_state_change_date date;' 与 self.env['ir.model.fields'].create(vals) 方式添加一列与一个字段，列名称（字段名称）必须以 **x_** 开头。
@@ -175,28 +175,28 @@ msgstr "金融机构识别码类型"
 22.    翻译问题，比如动态model名称，_(‘Description’) 类型，可以通过导出po文件查看，然后进行修改。_() 函数会调用po文件所对应的翻译。
 
        ```po
-          #. module: all_form_design
-          #: code:addons/all_form_design/all_form_design.py:1765
-          #, python-format
-          msgid "Date of state change"
-          msgstr "状态变更日期"
+                   #. module: all_form_design
+                   #: code:addons/all_form_design/all_form_design.py:1765
+                   #, python-format
+                   msgid "Date of state change"
+                   msgstr "状态变更日期"
        ```
 
 23.    xml 继承拓展问题：
 
        ```xml
-          <record id="view_form_department_inherited" model="ir.ui.view">
-            <field name="name">Hr department inherited Form</field>
-            <field name="model">hr.department</field>
-            <field name="inherit_id" ref="hr_base.view_department_form"/>
-            <!-- ref 表示要扩招的xml record_id -->
-            <field name="arch" type="xml">
-              <field name="company_id" position="after">
-              <!-- name 表示要扩招的xml field_id, position 表示下边的field所要添加的位置 -->
-                <field name="department_color" />
-              </field>
-            </field>
-          </record>
+                   <record id="view_form_department_inherited" model="ir.ui.view">
+                     <field name="name">Hr department inherited Form</field>
+                     <field name="model">hr.department</field>
+                     <field name="inherit_id" ref="hr_base.view_department_form"/>
+                     <!-- ref 表示要扩招的xml record_id -->
+                     <field name="arch" type="xml">
+                       <field name="company_id" position="after">
+                       <!-- name 表示要扩招的xml field_id, position 表示下边的field所要添加的位置 -->
+                         <field name="department_color" />
+                       </field>
+                     </field>
+                   </record>
        ```
 
 24.    取today的方法
@@ -209,8 +209,8 @@ msgstr "金融机构识别码类型"
              ```
 
        2.    ```
-                   from datetime import date
-                   today = date.today()
+                                     from datetime import date
+                                     today = date.today()
              ```
 
              3.    ```
@@ -224,55 +224,55 @@ msgstr "金融机构识别码类型"
                    ```
 
              4.    ```
-                      yesterday = (datetime.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
-                      tomorrow = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+                               yesterday = (datetime.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
+                               tomorrow = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
                    ```
 
 25.    定时任务
 
-          ```
-          <!--定时任务-->
-          <record forcecreate="True" id="ir_cron_update_expired" model="ir.cron">
-              <field name="name">更新组织单元是否过期</field>
-              <field name="active" eval="True"/>
-              <field name="user_id" ref="base.user_root"/>
-              <field name="interval_number">1</field>
-              <field name="interval_type">days</field>
-              <field name="nextcall">2000-01-01 00:00:00</field>
-              <field name="numbercall">-1</field>
-              <field name="doall" eval="True"/>
-              <field name="model" eval="'hr.department'"/>
-              <field name="function" eval="'update_expired'"/>
-          </record>
-          ```
+                   ```
+                   <!--定时任务-->
+                   <record forcecreate="True" id="ir_cron_update_expired" model="ir.cron">
+                       <field name="name">更新组织单元是否过期</field>
+                       <field name="active" eval="True"/>
+                       <field name="user_id" ref="base.user_root"/>
+                       <field name="interval_number">1</field>
+                       <field name="interval_type">days</field>
+                       <field name="nextcall">2000-01-01 00:00:00</field>
+                       <field name="numbercall">-1</field>
+                       <field name="doall" eval="True"/>
+                       <field name="model" eval="'hr.department'"/>
+                       <field name="function" eval="'update_expired'"/>
+                   </record>
+                   ```
 
 26.    **_search()** 方法，所有 search(), name_search(), 最后到会调用 **_search()** 方法，以下是重写**_search()** 的一个示例：（search(), 为通过过滤器，action_widonw 加载时调用的； name_search() 是作为 many2one 字段时调用的）
 
-       ```
-       @api.model
-       def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
-           args = args or []
-
-           active, is_expired = False, False
-           for domain in args:
-               if 'active' in domain:
-                   active = True
-               if 'is_expired' in domain:
-                   is_expired = True
-
-           extra_domain = []
-           if not active:
-               extra_domain.append(('active', '=', True))
-           if not is_expired:
-               extra_domain.append(('is_expired', '=', False))
-
-           tomorrow = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
-           extra_domain.append(('start_date', '<', tomorrow))
-
-           args = extra_domain + args
-
-           return super(HrDepartment, self)._search(args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
-       ```
+                ```
+                @api.model
+                def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+                    args = args or []
+              
+                    active, is_expired = False, False
+                    for domain in args:
+                        if 'active' in domain:
+                            active = True
+                        if 'is_expired' in domain:
+                            is_expired = True
+              
+                    extra_domain = []
+                    if not active:
+                        extra_domain.append(('active', '=', True))
+                    if not is_expired:
+                        extra_domain.append(('is_expired', '=', False))
+              
+                    tomorrow = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+                    extra_domain.append(('start_date', '<', tomorrow))
+              
+                    args = extra_domain + args
+              
+                    return super(HrDepartment, self)._search(args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
+                ```
 
 27.    sql 递归查询
 
@@ -368,9 +368,112 @@ def on_change_end_date(self):
         根据 start_date end_date 计算 is_in_use
         :return:
         '''
-        self.is_in_use = self.is_department_in_use(self.start_date, self.end_date)
+        for department in self:
+        	department.is_in_use = department.is_department_in_use(department.start_date, department.end_date)
 
     # is_in_use 表示是否在使用，根据 today 是否在 [start_date, end_date] 中而得，in，为 True， 否则 False
 is_in_use = fields_new.Boolean('In Use', compute='_compute_is_in_use', store=True)
+```
+
+```python
+# 关注者和待办者,如果是方法则调方法,如果是某个字段那就直接拿字段
+field_value = model_search_rule[field](self) if callable(model_search_rule[field]) else model_search_rule[field]
+```
+
+31.  新旧 api 比较
+
+    新 api ：
+
+
+```python
+departments = self.env['hr.department'].search([('active', '=', True)])  # 对象列表
+ir_values = self.env['ir.values'].browse(ir_values_id)  # 对象列表
+```
+
+​	旧 api：
+
+```python
+ids = self.search(cr, uid, [('name', '=', name)], context=context)  # id 列表
+employees = self.browse(cr, uid, ids, context=context)  # 对象列表
+```
+
+32. 新 api 中 self，self 为 recordset
+
+```python
+ @api.depends('start_date', 'end_date')
+ def _compute_is_in_use(self):
+    '''
+        根据 start_date end_date 计算 is_in_use
+        :return:
+        '''
+    for department in self:
+        department.is_in_use = department.is_department_in_use(department.start_date, department.end_date)
+
+```
+
+33. workflow_ 开头的函数，context 为空，如 
+
+```python
+def workflow_done(self, cr, uid, ids, context=None):
+    pass
+```
+
+34. 查询组织单元，并且找对应翻译
+
+```python
+@api.model
+def get_department_structure(self, department_ids, employee_ids):
+    sql = """SELECT id, name, parent_id, manager_id FROM hr_department WHERE id IN (
+                   WITH RECURSIVE r AS (
+                        SELECT * FROM hr_department WHERE id = ANY(%s)
+                        UNION ALL
+                        SELECT hr_department.* FROM hr_department, r WHERE hr_department.parent_id=r.id  AND hr_department.active=True AND hr_department.is_in_use=True
+                    )
+                    SELECT id FROM r ORDER BY id
+                );"""
+
+    self.env.cr.execute(sql, (department_ids.ids,))
+    departments = self.env.cr.fetchall()
+
+    self._cr.execute(
+        "select src,value from ir_translation where lang='%s' and name='%s'" % (self._context['lang'], 'hr.department,name'))
+    dep_lists = self._cr.fetchall()
+    dep_dic = {}
+    for dep in dep_lists:
+        dep_dic[dep[0]] = dep[1]
+
+        def set_dep(dep, dep_dic):
+            temp = list(dep)
+            temp.__setitem__(1, dep_dic.get(dep[1], dep[1]))
+            dep = tuple(temp)
+            return dep
+
+        departments = [set_dep(dep, dep_dic) for dep in departments]
+        self.env.cr.execute(
+            "select	 hr_employee.id,hr_employee.name,hr_employee.department_id,hr_employee.parent_id,work_phone,gender,work_email,birthday,work_location,image_small_url,res_users.id,res_users.rong_uid,hr_employee.notes,hr_job.name from hr_employee, res_users, hr_job where hr_employee.user_id=res_users.id and hr_employee.job_id=hr_job.id and hr_employee.id = ANY(%s);",
+            (employee_ids.ids,))
+        employees = self.env.cr.fetchall()
+        org_tree = org_structure.Org_StructureTree()
+        org_tree.init_Org_Tree(departments, employees)
+        org_dict = org_tree.get_Org_Structure()
+        return org_dict	
+```
+
+```python
+    @api.model
+    def get_specify_field_translations(self, name, field_type, lang):
+        """
+        根据 ir_translation 的 name 和 field_type 查找对应的原文和译文
+        :param name: ir.translation name
+        :param field_type: 条目类型
+        :param lang: 语言
+        :return: 原文-译文 组成的 key-value 字典
+        """
+        # 按id升序排列，确保最新id在字典中为有效翻译
+        query = """ SELECT src,value FROM ir_translation WHERE lang=%s AND type=%s AND name=%s ORDER BY id"""
+        params = (lang, field_type, name)
+        self.env.cr.execute(query, params)
+        menu_trans = self.env.cr.fetchall()
+        return {rec[0]: rec[1] for rec in menu_trans}
 ```
 
