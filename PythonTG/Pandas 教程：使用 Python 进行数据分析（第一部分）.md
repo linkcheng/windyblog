@@ -561,3 +561,146 @@ frame
 
 ### Pandas DataFrame 方法
 
+正如之前我们提到的，DataFrame 的每一个列都是一个 Series 对象
+
+```python
+type(reviews["title"])
+```
+
+```
+pandas.core.series.Series
+```
+
+那些对 DataFrame 适用的方法大多同样也适用于 Series 对象，包括 `head`：
+
+```python
+reviews["title"].head()
+```
+
+```
+0                              LittleBigPlanet PS Vita
+1    LittleBigPlanet PS Vita -- Marvel Super Hero E...
+2                                 Splice: Tree of Life
+3                                               NHL 13
+4                                               NHL 13
+Name: title, dtype: object
+```
+
+Pandas Series 和 DataFrames 中也有其他方法，使计算更简单。 例如，我们可以使用 [pandas.Series.mean](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.mean.html) 方法来查找一个 Series 的平均值：
+
+```python
+reviews['score'].mean()
+```
+
+```
+6.950459060402685
+```
+
+我们也可以调用类似的 pandas.DataFrame.mean 方法，它将在默认情况下找到 DataFrame 中每个数字列的平均值：
+
+```python
+reviews.mean()
+```
+
+```
+score               6.950459
+release_year     2006.515329
+release_month       7.138470
+release_day        15.603866
+dtype: float64
+```
+
+我们可以通过给 `mean` 方法添加 `axis `关键字参数，用来计算每行或者每列的平均值。`axis` 的缺省值为 0 ，并计算每一列的平均值。也可以设置为 1 来计算每一行的平均值。请注意，这只会计算每一行中类型为数值的平均值：
+
+```python
+reviews.mean(axis=1)
+```
+
+```
+0        510.500
+1        510.500
+2        510.375
+3        510.125
+4        510.125
+5        509.750
+6        508.750
+7        510.250
+8        508.750
+9        509.750
+10       509.875
+11       509.875
+12       509.500
+13       509.250
+14       509.250
+15       508.375
+16       508.375
+17       508.500
+18       507.375
+19       507.750
+20       507.750
+21       514.625
+22       514.625
+23       514.625
+24       515.000
+25       514.250
+26       514.750
+27       514.125
+28       514.250
+29       513.625
+          ...   
+18595    510.850
+18596    510.875
+18597    510.225
+18598    510.700
+18599    510.750
+18600    512.600
+18601    512.600
+18602    512.600
+18603    512.450
+18604    512.400
+18605    511.500
+18606    508.600
+18607    510.750
+18608    510.350
+18609    510.750
+18610    510.250
+18611    508.700
+18612    509.200
+18613    508.000
+18614    515.050
+18615    515.050
+18616    508.375
+18617    508.600
+18618    515.025
+18619    514.725
+18620    514.650
+18621    515.000
+18622    513.950
+18623    515.000
+18624    515.000
+dtype: float64
+```
+
+在 Series 和 DataFrames 上有很多方法，它们的行为类似于 `mean`。 这里有一些常见的：
+
+- [pandas.DataFrame.corr](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.corr.html) – 查找 DataFrame 中列之间的相关性。
+- [pandas.DataFrame.count](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.count.html) – 计算每个 DataFrame 列中的非空值的数量。
+- [pandas.DataFrame.max](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.max.html) – 查找每个列中的最大值。
+- [pandas.DataFrame.min](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.min.html) – 查找每个列中的最小值。
+- [pandas.DataFrame.median](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.median.html) – 查找每列的中位数。
+- [pandas.DataFrame.std](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.std.html) – 查找每列的标准差。
+
+我们可以使用 `corr` 方法来查看是否有任何列与 score 相关。 例如，通过这种方式我们可以得到，最近发布的游戏是否获得了更高的评价（release_year），或者是否年底发布的游戏得分更好（release_month）：
+
+```python
+reviews.corr()
+```
+
+|                   | score    | release_year | release_month | release_day |
+| ----------------- | -------- | ------------ | ------------- | ----------- |
+| **score**         | 1.000000 | 0.062716     | 0.007632      | 0.020079    |
+| **release_year**  | 0.062716 | 1.000000     | -0.115515     | 0.016867    |
+| **release_month** | 0.007632 | -0.115515    | 1.000000      | -0.067964   |
+| **release_day**   | 0.020079 | 0.016867     | -0.067964     | 1.000000    |
+
+如上所述，我们的数字列都不与 `score` 相关，这意味着发布时间与审核分数没有线性关系。
