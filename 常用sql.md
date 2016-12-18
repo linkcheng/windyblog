@@ -1,4 +1,4 @@
-修改翻译：
+-- 修改翻译：
 UPDATE ir_translation SET value='Bank Name 1' WHERE lang='en_US' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='bank_name' and model='hr.employee');
 
 UPDATE ir_translation SET value='Bank Account 1' WHERE lang='en_US' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='bank_account' and model='hr.employee');
@@ -28,7 +28,7 @@ select src,value from ir_translation where lang='en_US' and module='hr_base' and
 select value from ir_translation WHERE lang='en_US' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='bank_name' and model='hr.employee');
 
 
-查询结果作为值插入：
+-- 查询结果作为值插入：
 INSERT INTO import_fields (unique_index, field_type, create_if_not_find, sequence, required, field_id, relation_field, import_model_id) 
 SELECT true, 'many2one', false, 23 , true, i1.id, i2.id, i3.id 
 	FROM ir_model_fields i1, ir_model_fields i2, import_excel i3 
@@ -37,6 +37,14 @@ WHERE i1.model='hr.employee' AND i1.name='employee_type_rep' AND i2.model='hr.em
 insert into import_fields (unique_index, field_type, create_if_not_find, sequence, required, field_id, relation_field, import_model_id) select true , 'many2one', false, 23 , true , i1.id , i2.id , i3.id from ir_model_fields i1, ir_model_fields i2, import_excel i3 where i1.model='hr.employee' AND i1.name='employee_type_rep' and i2.model='hr.employee.type' AND i2.name='name' and i3.name='基本信息';
 
 insert into import_fields (unique_index, field_type, create_if_not_find, sequence, required, field_id, relation_field, import_model_id) select true as unique_index, 'many2one' as field_type, false as create_if_not_find, 23 as sequence , true as required, i1.id as field_id, i2.id as relation_field, i3.id as import_model_id from ir_model_fields i1, ir_model_fields i2, import_excel i3 where i1.model='hr.employee' AND i1.name='employee_type_rep' and i2.model='hr.employee.type' AND i2.name='name' and i3.name='基本信息';
+
+SELECT * FROM ir_model_fields 
+WHERE model IN ('hr.contract', 'employee.dimission', 'hr.termination', 'employee.rank.adjust', 'job.transfer', 'employee.probation') 
+AND name='dep_manager';
+-- 修改字段关联关系
+UPDATE ir_model_fields SET related='department_id.manager_id' 
+WHERE model IN ('hr.contract', 'employee.dimission', 'hr.termination', 'employee.rank.adjust', 'job.transfer', 'employee.probation') 
+AND name='dep_manager';
 
 
 -- employee_dimission
@@ -84,7 +92,7 @@ INSERT INTO dimission_summary (
 	can_show, is_hr_termination, termination_id, name, employee_id, employee_number, employee_name, company_id, department_id, job_id, parent_id, dep_manager,
 	leave_time, reason_leave_type, reason_leave, social_security_end_month, housing_fund_end_month, leave_reason,
 	state, flow_id, activity_id, submit_date, manager_level, batch, 
-	create_uid, create_date, write_uid, write_date, active)
+	create_user_id, create_date, write_uid, write_date, active)
 SELECT 
 	false, true, id, name, employee_id, employee_number, employee_name, company_id, department_id, job_id, parent_id, dep_manager,
 	leave_time, reason_leave_type, reason_leave, social_security_end_month, housing_fund_end_month, leave_reason,
@@ -104,6 +112,55 @@ SELECT
 	i1.user_id, i1.name, i1.department_id, i1.job_id, i2.id, 'dimission.summary'
 	FROM approve_notify i1, dimission_summary i2
 WHERE i1.model IN ('hr.termination', 'hr.dimission') AND i1.active=TRUE AND i1.record_id=i2.termination_id;
+
+--1.插入到hr_termination
+INSERT INTO hr_termination(
+    name, employee_id, employee_number, employee_name, company_id, department_id, job_id, parent_id,
+    dep_manager, leave_time, reason_leave_type, reason_leave, leave_reason,
+    social_security_end_month, housing_fund_end_month, 
+    state, flow_id, activity_id, submit_date, manager_level, batch, 
+    create_uid, create_date, write_uid, write_date, active)
+SELECT 
+    name, employee_id, employee_number, employee_name, company_id, department_id, job_id, parent_id, 
+    dep_manager, leave_time, reason_leave_type, reason_leave, leave_reason,
+    social_security_end_month, housing_fund_end_month, 
+    state, flow_id, activity_id, submit_date, manager_level, batch, 
+    create_uid, create_date, write_uid, write_date, active
+FROM employee_dimission
+WHERE employee_dimission.name IN ('eh201612131038', 'eh201612131040', 'eh201612131039');
+
+--2.插入到dimission_summary
+INSERT INTO dimission_summary (
+    can_show, is_hr_termination, termination_id, name, employee_id, employee_number, employee_name, company_id, department_id, job_id, parent_id, dep_manager,
+    leave_time, reason_leave_type, reason_leave, social_security_end_month, housing_fund_end_month, leave_reason,
+    state, flow_id, activity_id, submit_date, manager_level, batch, 
+    create_user_id, create_date, write_uid, write_date, active)
+SELECT 
+    false, true, id, name, employee_id, employee_number, employee_name, company_id, department_id, job_id, parent_id, dep_manager,
+    leave_time, reason_leave_type, reason_leave, social_security_end_month, housing_fund_end_month, leave_reason,
+    state, flow_id, activity_id, submit_date, manager_level, batch, 
+    create_uid, create_date, write_uid, write_date, active
+FROM hr_termination WHERE name IN ('eh201612131038', 'eh201612131040', 'eh201612131039');
+
+--3.建立 hr_termination 与 dimission_summar 关联
+UPDATE hr_termination SET dimission_summary_id=S.id
+FROM (SELECT id, termination_id, name FROM dimission_summary WHERE is_hr_termination=True) S
+WHERE hr_termination.id=S.termination_id AND S.name in ('eh201612131038', 'eh201612131040', 'eh201612131039');
+
+
+UPDATE company_record SET res_model='hr.termination' res_id=S.id
+FROM (SELECT id FROM hr_termination WHERE name='eh201612131038') S
+WHERE company_record.event_type='leave' 
+AND employee_id=(SELECT employee_id from employee_dimission WHERE name='eh201612131038');
+
+UPDATE company_record SET res_model='hr.termination' res_id=S.id
+FROM (SELECT id FROM hr_termination WHERE is_hr_termination=True) S
+WHERE company_record.event_type='leave' 
+AND employee_id IN (SELECT employee_id from employee_dimission WHERE name IN ('eh201612131038', 'eh201612131039', 'eh201612131040'));
+
+
+-- 更新 action_code
+update import_excel set action_code='# Available variables' where model_id=(select id from ir_model where model='employee.dimission');
 
 
 -- 翻译
@@ -127,7 +184,7 @@ ON A.ID = C.ID
 where Table_A.ID = S.ID
 
 
-replace函数：
+-- replace函数：
 UPDATE import_excel SET action_code = replace(action_code,'env.context.get(''tz'')', 'env.context.get(''tz'', '''') if env.context.get(''tz'', '''') else None') WHERE name='基本信息';
 
 UPDATE import_excel SET action_code = replace(action_code,'env.context.get(''lang'')', 'env.context.get(''lang'', '''') if env.context.get(''lang'', '''') else None') WHERE name='基本信息';
@@ -142,7 +199,7 @@ ALTER TABLE x_af_2016_0002 ADD state_change_date DATE;
 
 UPDATE x_af_2016_0002 SET state_change_date=write_date where state='done';
 
-添加字段
+-- 添加字段
 SELECT 'ALTER TABLE ' ||design_model|| ' ADD state_change_date2 DATE;' FROM all_form_design WHERE active=true; 
 
 SELECT 'UPDATE ' ||design_model|| ' SET state_change_date=write_date;' FROM all_form_design WHERE active=true;
