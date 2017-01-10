@@ -28,6 +28,20 @@ select src,value from ir_translation where lang='en_US' and module='hr_base' and
 select value from ir_translation WHERE lang='en_US' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='bank_name' and model='hr.employee');
 
 
+-- 删除画面多余 filed
+DELETE FROM ir_ui_view WHERE model_data_id in (SELECT id FROM ir_model_data WHERE module='hr_cost_center' AND model='ir.ui.view' AND name in ('view_hr_employee_cost_center_form', 'view_hr_department_cost_center_form', 'view_job_transfer_cost_center_form', 'view_rank_job_transfer_cost_center_form'));
+
+DELETE FROM ir_model_data WHERE module='hr_cost_center' AND model='ir.ui.view' AND name in ('view_hr_employee_cost_center_form', 'view_hr_department_cost_center_form', 'view_job_transfer_cost_center_form', 'view_rank_job_transfer_cost_center_form');
+
+-- 修改初始化数据所属 module
+UPDATE ir_model_data SET module='hr_base' WHERE module='hr_cost_center' AND model in ('ir.cron', 'cost.center.type', 'ir.ui.menu');
+
+SELECT * FROM ir_translation T INNER JOIN ir_model S ON T.res_id=S.id WHERE S.model='hr.contract' AND T.src='Contract' AND T.lang='zh_CN';
+UPDATE ir_translation SET module='hr_contract_inherit' WHERE res_id=(SELECT id FROM ir_model WHERE model='hr.contract');
+UPDATE ir_translation SET module='hr_job_transfer' WHERE src='New Cost Center' AND res_id=(SELECT id FROM ir_model_fields WHERE model='job.transfer' AND name='new_cost_center');
+UPDATE ir_translation SET module='hr_rank_job_transfer' WHERE src='New Cost Center' AND res_id=(SELECT id FROM ir_model_fields WHERE model='rank.job.transfer' AND name='new_cost_center');
+
+
 -- 查询结果作为值插入：
 INSERT INTO import_fields (unique_index, field_type, create_if_not_find, sequence, required, field_id, relation_field, import_model_id) 
 SELECT true, 'many2one', false, 23 , true, i1.id, i2.id, i3.id 
@@ -92,7 +106,7 @@ INSERT INTO dimission_summary (
 	can_show, is_hr_termination, termination_id, name, employee_id, employee_number, employee_name, company_id, department_id, job_id, parent_id, dep_manager,
 	leave_time, reason_leave_type, reason_leave, social_security_end_month, housing_fund_end_month, leave_reason,
 	state, flow_id, activity_id, submit_date, manager_level, batch, 
-	create_user_id, create_date, write_uid, write_date, active)
+	create_user_id·		·, create_date, write_uid, write_date, active)
 SELECT 
 	false, true, id, name, employee_id, employee_number, employee_name, company_id, department_id, job_id, parent_id, dep_manager,
 	leave_time, reason_leave_type, reason_leave, social_security_end_month, housing_fund_end_month, leave_reason,

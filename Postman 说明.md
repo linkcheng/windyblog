@@ -41,6 +41,12 @@ Headers 
 
 （如：json格式的提交数据需要添加：Content-Type ：application/x-www-form-urlencoded，否则会导致请求失败）
 
+**POST json 请求格式：**
+
+在header中添加**Content-Type:application/json**
+
+body中选择 **raw** 格式，然后选择 **JSON（application/json）**
+
 如图：
 
 ![img](http://img2.tuicool.com/bE3iyi.png!web)
