@@ -1,4 +1,9 @@
 -- 修改翻译：
+insert into hr_contract_agreement_category (category, code, name, active) values ('labor_contract', 'CN01', 'Labor Contract', true);
+insert into hr_contract_agreement_category (category, code, name, active) values ('agreement', 'CN02', 'None Disclosure Agreement', true);
+insert into hr_contract_agreement_category (category, code, name, active) values ('agreement', 'CN03', 'Competitive Restriction', true);
+insert into hr_contract_agreement_category (category, code, name, active) values ('agreement', 'CN04', 'Service Agreement', true);
+
 -- 合同协议类型
 INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('zh_CN', 'Labor Contract', 'hr.contract.agreement.category,name', 1, 'hr_contract_inherit', 'translated', '劳动合同', 'model', true);
 INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('en_US', 'Labor Contract', 'hr.contract.agreement.category,name', 1, 'hr_contract_inherit', 'translated', 'Labor Contract', 'model', true);
@@ -26,8 +31,6 @@ UPDATE ir_translation SET is_customer=false WHERE src='template' AND name='ir.mo
 
 DELETE FROM ir_translation WHERE src IN ('Draft data', 'Created data') AND module='hr_contract_inherit' AND name='ir.ui.view,arch_db';
 
-
-
 -- 合同&协议模板
 UPDATE ir_translation SET is_customer=true WHERE src='Contract Template' AND name in ('ir.ui.menu,name', 'ir.actions.act_window,name') AND module='eroad_template';
 UPDATE ir_translation SET is_customer=true WHERE src='Contract Template Name' or value='Contract Template Name' AND name='ir.model.fields,field_description' AND module='eroad_template';
@@ -38,8 +41,6 @@ UPDATE ir_translation SET is_customer=true WHERE src='Contract ID' AND name='ir.
 UPDATE ir_translation SET is_customer=true WHERE src='Category' AND name='ir.model.fields,field_description' AND module='hr_contract_inherit';
 UPDATE ir_translation SET is_customer=true WHERE src='Validity' AND name='ir.ui.view,arch_db' AND module='hr_contract_inherit';
 
-
-
 UPDATE ir_translation SET value='模板主题' WHERE lang='zh_CN' AND src='Template Subject' AND name='ir.model.fields,field_description' AND module='eroad_template';
 
 UPDATE ir_translation SET value='合同与协议模板' WHERE lang='zh_CN' AND src in ('Contract & Agreement Template', 'Contract &amp; Agreement Template') AND name in ('ir.ui.menu,name', 'ir.actions.act_window,name') AND module='eroad_template';
@@ -49,8 +50,6 @@ UPDATE ir_translation SET value='类型' WHERE src='Category' AND lang='zh_CN' A
 -- 删除约束
 ALTER TABLE eroad_template_preview DROP CONSTRAINT eroad_template_preview_name_category_uniq;
 ALTER TABLE eroad_template DROP CONSTRAINT eroad_template_name_category_uniq;
-
-
 
 UPDATE ir_translation SET value='劳动合同', is_customer=true, state='translated' WHERE lang='zh_CN' AND src='Labor Contract' AND name='hr.contract.agreement.category,name' AND module='hr_contract_inherit' AND type='model';
 
