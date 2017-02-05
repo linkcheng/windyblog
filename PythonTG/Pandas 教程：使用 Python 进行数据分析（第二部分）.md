@@ -1,18 +1,41 @@
 ## Pandas 教程：使用 Python 进行数据分析（第二部分）
 
+我们在[第一部分教程](http://www.dataquest.io/blog/pandas-python-tutorial/)中讲述了一些 Pandas 的基础内容。我们了解了 pandas DataFrames 的基础知识，索引检索与相关计算。如果觉得对 Pandas 依然没有信心，那么可以在 [Dataquest pandas Course](https://www.dataquest.io/course/data-analysis-intermediate) 上检验。
+
 We covered a lot of ground in [Part 1 of our pandas tutorial](http://www.dataquest.io/blog/pandas-python-tutorial/). We went from the basics of pandas DataFrames to indexing and computations. If you’re still not confident with Pandas, you might want to check out the[Dataquest pandas Course](https://www.dataquest.io/course/data-analysis-intermediate).
+
+在这部分教程中，我们将深入研究 Pandas 的最强大的部分之一 - 分组与聚合功能。通过这些功能，十分简单的处理分组汇总统计，模式发现以及通过多种方式进行数据切片操作。
 
 In this tutorial, we’ll dive into one of the most powerful aspects of pandas – its grouping and aggregation functionality. With this functionality, it’s dead simple to compute group summary statistics, discover patterns, and slice up your data in various ways.
 
+上周是感恩节，接下来我们将会使用美国感恩节大餐的代表性食物作为数据集，做为探索 pandas 库的数据。可以在[这里](https://github.com/fivethirtyeight/data/tree/master/thanksgiving-2015)下载数据集。它包含 `1058` 条来自 [FiveThirtyEight](http://fivethirtyeight.com/) 的调查反馈。每一位接受调查的人都会被问及他们在感恩节所吃的代表性食物，以及一些人口统计学问题，比如他们的性别、收入以及区域。这份数据集可以让我们发现基于宗教与收入分布的美国人在感恩节大餐中的饮食情况。我们接下来就会用到 pandas 的分组与聚合功能，来研究数据并且尝试找到它们之间的关联性。
+
 Since Thanksgiving was just last week, we’ll use a dataset on what Americans typically eat for Thanksgiving dinner as we explore the pandas library. You can download the dataset [here](https://github.com/fivethirtyeight/data/tree/master/thanksgiving-2015). It contains `1058` online survey responses collected by [FiveThirtyEight](http://fivethirtyeight.com/). Each survey respondent was asked questions about what they typically eat for Thanksgiving, along with some demographic questions, like their gender, income, and location. This dataset will allow us to discover regional and income-based patterns in what Americans eat for Thanksgiving dinner. As we explore the data and try to find patterns, we’ll be heavily using the grouping and aggregation functionality of pandas.
+
+在美国，我们都非常喜欢感恩节大餐。
 
 We're very into Thanksgiving dinner in America.
 
+注：本教程使用 [Python 3.5](https://www.python.org/downloads/release/python-350/) 与 [Jupyter Notebook](http://jupyter.org/) 进行数据分析。
+
 Just as a note, we’ll be using [Python 3.5](https://www.python.org/downloads/release/python-350/) and [Jupyter Notebook](http://jupyter.org/) to do our analysis.
+
+# 读取数据与数据概述
 
 ## Reading in and summarizing the data
 
+首先来读取数据，然后再做初步研究分析。这将帮助我们找到如何创建分组与发现模式。
+
 Our first step is to read in the data and do some preliminary exploration. This will help us figure out how we want to approach creating groups and finding patterns.
+
+回忆一下第一部分教程，使用 [pandas.read_csv](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html) 函数读取数据。数据使用 `Latin-1` 编码格式，因此需要通过关键字参数 `encoding` 指定编码格式。否则，pandas 将不能加载数据，并会提示以下错误：
+
+```python
+import pandas as pd
+
+data = pd.read_csv("thanksgiving-2015-poll-data.csv", encoding="Latin-1")
+data.head()
+```
 
 As you may recall from part one of this tutorial, we can read in the data using the [pandas.read_csv](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html) function. The data is stored using `Latin-1` encoding, so we additionally need to specify the `encoding` keyword argument. If we don’t, pandas won’t be able to load in the data, and we’ll get an error:
 
@@ -21,7 +44,6 @@ import pandas as pd
 
 data = pd.read_csv("thanksgiving-2015-poll-data.csv", encoding="Latin-1")
 data.head()
-
 ```
 
 |      | RespondentID | Do you celebrate Thanksgiving? | What is typically the main dish at your Thanksgiving dinner? | What is typically the main dish at your Thanksgiving dinner? - Other (please specify) | How is the main dish typically cooked? | How is the main dish typically cooked? - Other (please specify) | What kind of stuffing/dressing do you typically have? | What kind of stuffing/dressing do you typically have? - Other (please specify) | What type of cranberry saucedo you typically have? | What type of cranberry saucedo you typically have? - Other (please specify) | ...  | Have you ever tried to meet up with hometown friends on Thanksgiving night? | Have you ever attended a "Friendsgiving?" | Will you shop any Black Friday sales on Thanksgiving Day? | Do you work in retail? | Will you employer make you work on Black Friday? | How would you describe where you live? | Age     | What is your gender? | How much total combined money did all members of your HOUSEHOLD earn last year? | US Region          |

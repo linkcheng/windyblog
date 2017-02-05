@@ -1,4 +1,110 @@
 -- 修改翻译：
+-- 合同协议类型
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('zh_CN', 'Labor Contract', 'hr.contract.agreement.category,name', 1, 'hr_contract_inherit', 'translated', '劳动合同', 'model', true);
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('en_US', 'Labor Contract', 'hr.contract.agreement.category,name', 1, 'hr_contract_inherit', 'translated', 'Labor Contract', 'model', true);
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('zh_CN', 'None Disclosure Agreement', 'hr.contract.agreement.category,name', 2, 'hr_contract_inherit', 'translated', '保密协议', 'model', true);
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('en_US', 'None Disclosure Agreement', 'hr.contract.agreement.category,name', 2, 'hr_contract_inherit', 'translated', 'None Disclosure Agreement', 'model', true);
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('zh_CN', 'Competitive Restriction', 'hr.contract.agreement.category,name', 3, 'hr_contract_inherit', 'translated', '竟业协议', 'model', true);
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('en_US', 'Competitive Restriction', 'hr.contract.agreement.category,name', 3, 'hr_contract_inherit', 'translated', 'Competitive Restriction', 'model', true);
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('zh_CN', 'Service Agreement', 'hr.contract.agreement.category,name', 4, 'hr_contract_inherit', 'translated', '服务期协议', 'model', true);
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('en_US', 'Service Agreementt', 'hr.contract.agreement.category,name', 4, 'hr_contract_inherit', 'translated', 'Service Agreement', 'model', true);
+
+-- 合同&协议模板
+UPDATE ir_translation SET is_customer=false WHERE src='Contract Template' AND name in ('ir.ui.menu,name', 'ir.actions.act_window,name') AND module='eroad_template';
+UPDATE ir_translation SET is_customer=false WHERE src='Contract Template Name' or value='Contract Template Name' AND name='ir.model.fields,field_description' AND module='eroad_template';
+UPDATE ir_translation SET is_customer=false WHERE src='Template Remind' or value='Template Remind' AND name='ir.model.fields,field_description' AND module='eroad_template';
+
+-- 合同
+UPDATE ir_translation SET is_customer=false WHERE src='Contract ID' AND name='ir.model.fields,field_description' AND module='hr_contract_inherit';
+UPDATE ir_translation SET is_customer=false WHERE src='Category' AND name='ir.model.fields,field_description' AND module='hr_contract_inherit';
+UPDATE ir_translation SET is_customer=false WHERE src='Validity' AND name='ir.ui.view,arch_db' AND module='hr_contract_inherit';
+UPDATE ir_translation SET is_customer=false WHERE src='Category Name' AND name='ir.model.fields,field_description' AND module='hr_contract_inherit';
+UPDATE ir_translation SET is_customer=false WHERE src='template' AND name='ir.model.fields,field_description' AND module='hr_contract_inherit';
+
+DELETE FROM ir_translation WHERE src IN ('Draft data', 'Created data') AND module='hr_contract_inherit' AND name='ir.ui.view,arch_db';
+
+
+
+-- 合同&协议模板
+UPDATE ir_translation SET is_customer=true WHERE src='Contract Template' AND name in ('ir.ui.menu,name', 'ir.actions.act_window,name') AND module='eroad_template';
+UPDATE ir_translation SET is_customer=true WHERE src='Contract Template Name' or value='Contract Template Name' AND name='ir.model.fields,field_description' AND module='eroad_template';
+UPDATE ir_translation SET is_customer=true WHERE src='Template Remind' or value='Template Remind' AND name='ir.model.fields,field_description' AND module='eroad_template';
+
+-- 合同
+UPDATE ir_translation SET is_customer=true WHERE src='Contract ID' AND name='ir.model.fields,field_description' AND module='hr_contract_inherit';
+UPDATE ir_translation SET is_customer=true WHERE src='Category' AND name='ir.model.fields,field_description' AND module='hr_contract_inherit';
+UPDATE ir_translation SET is_customer=true WHERE src='Validity' AND name='ir.ui.view,arch_db' AND module='hr_contract_inherit';
+
+
+
+UPDATE ir_translation SET value='模板主题' WHERE lang='zh_CN' AND src='Template Subject' AND name='ir.model.fields,field_description' AND module='eroad_template';
+
+UPDATE ir_translation SET value='合同与协议模板' WHERE lang='zh_CN' AND src in ('Contract & Agreement Template', 'Contract &amp; Agreement Template') AND name in ('ir.ui.menu,name', 'ir.actions.act_window,name') AND module='eroad_template';
+
+UPDATE ir_translation SET value='类型' WHERE src='Category' AND lang='zh_CN' AND name='ir.model.fields,field_description' AND module='eroad_template';
+
+-- 删除约束
+ALTER TABLE eroad_template_preview DROP CONSTRAINT eroad_template_preview_name_category_uniq;
+ALTER TABLE eroad_template DROP CONSTRAINT eroad_template_name_category_uniq;
+
+
+
+UPDATE ir_translation SET value='劳动合同', is_customer=true, state='translated' WHERE lang='zh_CN' AND src='Labor Contract' AND name='hr.contract.agreement.category,name' AND module='hr_contract_inherit' AND type='model';
+
+UPDATE ir_translation SET value='保密协议', is_customer=true, state='translated' WHERE lang='zh_CN' AND src='None Disclosure Agreement' AND name='hr.contract.agreement.category,name' AND module='hr_contract_inherit' AND type='model';
+
+UPDATE ir_translation SET value='竟业协议', is_customer=true, state='translated' WHERE lang='zh_CN' AND src='Competitive Restriction' AND name='hr.contract.agreement.category,name' AND module='hr_contract_inherit' AND type='model';
+
+UPDATE ir_translation SET value='服务期协议', is_customer=true, state='translated' WHERE lang='zh_CN' AND src='Service Agreement' AND name='hr.contract.agreement.category,name' AND module='hr_contract_inherit' AND type='model';
+
+
+UPDATE ir_translation SET is_customer=true, state='translated' WHERE lang='en_US' AND src='Labor Contract' AND name='hr.contract.agreement.category,name' AND module='hr_contract_inherit' AND type='model';
+
+UPDATE ir_translation SET is_customer=true, state='translated' WHERE lang='en_US' AND src='None Disclosure Agreement' AND name='hr.contract.agreement.category,name' AND module='hr_contract_inherit' AND type='model';
+
+UPDATE ir_translation SET is_customer=true, state='translated' WHERE lang='en_US' AND src='Competitive Restriction' AND name='hr.contract.agreement.category,name' AND module='hr_contract_inherit' AND type='model';
+
+UPDATE ir_translation SET is_customer=true, state='translated' WHERE lang='en_US' AND src='Service Agreement' AND name='hr.contract.agreement.category,name' AND module='hr_contract_inherit' AND type='model';
+
+UPDATE ir_translation SET is_customer=true, state='translated' WHERE lang='zh_CN' AND src='Labor Contract' AND name='hr.contract.agreement.category,category' AND module='hr_contract_inherit' AND type='selection';
+
+UPDATE ir_translation SET is_customer=true, state='translated' WHERE lang='zh_CN' AND src='None Disclosure Agreement' AND name='hr.contract.agreement.category,category' AND module='hr_contract_inherit' AND type='selection';
+
+UPDATE ir_translation SET is_customer=true, state='translated' WHERE lang='zh_CN' AND src='Competitive Restriction' AND name='hr.contract.agreement.category,category' AND module='hr_contract_inherit' AND type='selection';
+
+UPDATE ir_translation SET is_customer=true, state='translated' WHERE lang='zh_CN' AND src='Service Agreement' AND name='hr.contract.agreement.category,category' AND module='hr_contract_inherit' AND type='selection';
+
+SELECT * from ir_translation WHERE src='New Job Grade Category' AND lang='en_US' AND name='ir.model.fields,field_description' AND module='hr_rank_job_transfer';
+SELECT * from ir_translation WHERE src='New Job Grade Category' AND lang='zh_CN' AND name='ir.model.fields,field_description' AND module='hr_rank_job_transfer';
+SELECT * from ir_translation WHERE src='New Job Grade' AND lang='en_US' AND name='ir.model.fields,field_description' AND module='hr_rank_job_transfer';
+SELECT * from ir_translation WHERE src='New Job Grade' AND lang='zh_CN' AND name='ir.model.fields,field_description' AND module='hr_rank_job_transfer';
+
+SELECT * from ir_translation WHERE src='New Job Grade Category' AND lang='en_US' AND name='ir.model.fields,field_description' AND module='hr_employee_rank';
+SELECT * from ir_translation WHERE src='New Job Grade Category' AND lang='zh_CN' AND name='ir.model.fields,field_description' AND module='hr_employee_rank';
+SELECT * from ir_translation WHERE src='New Job Grade' AND lang='en_US' AND name='ir.model.fields,field_description' AND module='hr_employee_rank';
+SELECT * from ir_translation WHERE src='New Job Grade' AND lang='zh_CN' AND name='ir.model.fields,field_description' AND module='hr_employee_rank';
+
+UPDATE ir_translation SET value='New Grade' WHERE src='New Job Grade Category' AND lang='en_US' AND name='ir.model.fields,field_description' AND module='hr_rank_job_transfer';
+UPDATE ir_translation SET value='新职级' WHERE src='New Job Grade Category' AND lang='zh_CN' AND name='ir.model.fields,field_description' AND module='hr_rank_job_transfer';
+UPDATE ir_translation SET value='New Level' WHERE src='New Job Grade' AND lang='en_US' AND name='ir.model.fields,field_description' AND module='hr_rank_job_transfer';
+UPDATE ir_translation SET value='新级别' WHERE src='New Job Grade' AND lang='zh_CN' AND name='ir.model.fields,field_description' AND module='hr_rank_job_transfer';
+
+UPDATE ir_translation SET value='New Grade' WHERE src='New Job Grade Category' AND lang='en_US' AND name='ir.model.fields,field_description' AND module='hr_employee_rank';
+UPDATE ir_translation SET value='新职级' WHERE src='New Job Grade Category' AND lang='zh_CN' AND name='ir.model.fields,field_description' AND module='hr_employee_rank';
+UPDATE ir_translation SET value='New Level' WHERE src='New Job Grade' AND lang='en_US' AND name='ir.model.fields,field_description' AND module='hr_employee_rank';
+UPDATE ir_translation SET value='新级别' WHERE src='New Job Grade' AND lang='zh_CN' AND name='ir.model.fields,field_description' AND module='hr_employee_rank';
+
+UPDATE ir_translation SET value='草稿' WHERE src='Draft' AND lang='zh_CN' AND name='hr.termination,state' AND module='employee_dimission';
+
+-- 岗位成了职级
+DELETE FROM ir_translation WHERE src='Transfer' AND name='ir.model,name' AND module='hr_employee_rank' AND res_id=(SELECT id FROM ir_model WHERE model='employee.rank.adjust');
+-- 维塔士 HR Termination
+UPDATE ir_translation SET value='员工离职' WHERE src='HR Termination' AND lang='zh_CN' AND name='ir.model,name';
+
+
 UPDATE ir_translation SET value='Bank Name 1' WHERE lang='en_US' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='bank_name' and model='hr.employee');
 
 UPDATE ir_translation SET value='Bank Account 1' WHERE lang='en_US' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='bank_account' and model='hr.employee');
@@ -221,3 +327,775 @@ SELECT 'UPDATE ' ||design_model|| ' SET state_change_date=write_date;' FROM all_
 SELECT 'ALTER TABLE ' ||design_model|| ' ADD last_approve_date DATE;' FROM all_form_design WHERE active=true; 
 
 SELECT 'ALTER TABLE ' ||design_model|| ' ADD last_approver integer;' FROM all_form_design WHERE active=true; 
+
+
+
+--员工离职
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Employee Name</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Employee Name</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Employee Name</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>员工姓名</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Employee Number</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Employee Number</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Employee Number</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>员工编号</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Org Unit</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Org Unit</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Org Unit</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>组织单元</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Job</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Job</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Job</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>岗位</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Termination Date</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Termination Date</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Termination Date</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>离职日期</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Termination Reason Category</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Termination Reason Category</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Termination Reason Category</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>原因类别</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Termination Reason</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Termination Reason</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Termination Reason</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>离职原因</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Remarks:<br/>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Remarks:<br/>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Remarks:<br/>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '备注：<br/>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Employee Name', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Employee Name', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Employee Name', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '员工姓名', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Org Unit', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Org Unit', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Org Unit', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '组织单元', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Job', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Job', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Job', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '岗位', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Approval Node', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Approval Node', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Approval Node', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '审批节点', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Status', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Status', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Status', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '状态', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Time', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Time', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Time', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '时间', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Remarks', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Remarks', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Remarks', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '备注', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Termination', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Termination', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Termination', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '员工离职', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Signature:_____________', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Signature:_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Signature:_____________', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '签字：_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Date:_____________', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Date:_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Date:_____________', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '日期：_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Email:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Email:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Email:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '电子邮件：', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Fax:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Fax:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Fax:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '传真：', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Page:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Page:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Page:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '页：', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Phone:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Phone:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Phone:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '电话:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Website:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Website:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Website:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '网站:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+
+
+--离职记录
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Employee Name</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Employee Name</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Employee Name</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>员工姓名</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Employee Number</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Employee Number</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Employee Number</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>员工编号</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Org Unit</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Org Unit</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Org Unit</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>组织单元</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Job</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Job</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Job</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>岗位</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Termination Date</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Termination Date</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Termination Date</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>离职日期</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Termination Reason Category</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Termination Reason Category</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Termination Reason Category</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>原因类别</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Termination Reason</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>Termination Reason</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Termination Reason</span>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '<span>离职原因</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Remarks:<br/>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Remarks:<br/>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Remarks:<br/>', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '备注：<br/>', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Employee Name', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Employee Name', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Employee Name', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '员工姓名', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Org Unit', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Org Unit', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Org Unit', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '组织单元', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Job', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Job', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Job', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '岗位', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Approval Node', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Approval Node', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Approval Node', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '审批节点', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Status', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Status', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Status', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '状态', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Time', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Time', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Time', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '时间', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Remarks', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Remarks', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Remarks', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '备注', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Termination', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Termination', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Termination', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '员工离职', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Signature:_____________', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Signature:_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Signature:_____________', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '签字：_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Date:_____________', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Date:_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Date:_____________', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '日期：_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Email:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Email:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Email:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '电子邮件：', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Fax:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Fax:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Fax:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '传真：', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Page:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Page:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Page:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '页：', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Phone:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Phone:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Phone:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '电话:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Website:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', 'Website:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Website:', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '网站:', 'model', true 
+FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
+
+
+
+--岗位职级调整
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Employee Name</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Employee Name</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Employee Name</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>员工姓名</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Employee Number</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Employee Number</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Employee Number</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>员工编号</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Org Unit</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Org Unit</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Org Unit</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>组织单元</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Job</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Job</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Job</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>岗位</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Effective Date</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Effective Date</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Effective Date</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>生效日期</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Supervisor</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Supervisor</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Supervisor</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>汇报上级</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Org Unit Manager</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Org Unit Manager</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Org Unit Manager</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>组织单元经理</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Function</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Function</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Function</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>职能</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Transfer Reason</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Transfer Reason</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Transfer Reason</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>调动类型</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>New Org Unit</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>New Org Unit</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>New Org Unit</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>新组织单元</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>New Position</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>New Position</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>New Position</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>新岗位</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>New Supervisor</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>New Supervisor</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>New Supervisor</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>新汇报上级</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>New Org Unit Manager</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>New Org Unit Manager</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>New Org Unit Manager</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>新组织单元经理</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>New Function</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>New Function</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>New Function</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>新职能</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Promotion Reason</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Promotion Reason</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Promotion Reason</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>调整原因</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Remarks:<br/>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Remarks:<br/>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Remarks:<br/>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '备注：<br/>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Employee Name', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Employee Name', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Employee Name', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '员工姓名', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Org Unit', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Org Unit', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Org Unit', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '组织单元', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Job', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Job', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Job', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '岗位', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Approval Node', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Approval Node', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Approval Node', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '审批节点', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Status', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Status', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Status', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '状态', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Time', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Time', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Time', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '时间', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Remarks', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Remarks', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Remarks', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '备注', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Signature:_____________', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Signature:_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Signature:_____________', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '签字：_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Date:_____________', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Date:_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Date:_____________', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '日期：_____________', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Email:', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Email:', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Email:', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '电子邮件：', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Fax:', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Fax:', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Fax:', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '传真：', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Page:', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Page:', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Page:', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '页：', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Phone:', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Phone:', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Phone:', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '电话:', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', 'Website:', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', 'Website:', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', 'Website:', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '网站:', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+-- 除维塔士外
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Job Grade Category</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Job Grade Category</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Job Grade Category</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>职级类别</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Job Grade</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Job Grade</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Job Grade</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>职级</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>New Job Grade Category</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>New Job Grade Category</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>New Job Grade Category</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>新职级类别</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>New Job Grade</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>New Job Grade</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>New Job Grade</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>新职级</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+-- 维塔士
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Job Grade Category</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Grade</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Job Grade Category</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>职级</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>Job Grade</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>Level</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>Job Grade</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>级别</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+SELECT 'en_US', '<span>New Job Grade Category</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>New Grade</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>New Job Grade Category</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>新职级</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'en_US', '<span>New Job Grade</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>New Level</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) 
+SELECT 'zh_CN', '<span>New Job Grade</span>', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '<span>新级别</span>', 'model', true 
+FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+
+
+
+
+
+
+
+
