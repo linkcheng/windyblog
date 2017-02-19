@@ -48,7 +48,7 @@ Python 是进行数据分析的绝佳语言，主要原因是以数据为中心�
 
 ```python
 import pandas as pd 
-reviews = pd.read_csv("ign.csv")
+reviews = pd.read_csv("ign.csv")
 ```
 
 一旦我们把数据读入到 DataFrame 中，Pandas 提供两个方法让我们快速打印出数据。 这两个函数是：

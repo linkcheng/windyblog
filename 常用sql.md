@@ -1,21 +1,33 @@
 -- 修改翻译：
-insert into hr_contract_agreement_category (category, code, name, active) values ('labor_contract', 'CN01', 'Labor Contract', true);
-insert into hr_contract_agreement_category (category, code, name, active) values ('agreement', 'CN02', 'None Disclosure Agreement', true);
-insert into hr_contract_agreement_category (category, code, name, active) values ('agreement', 'CN03', 'Competitive Restriction', true);
-insert into hr_contract_agreement_category (category, code, name, active) values ('agreement', 'CN04', 'Service Agreement', true);
 
--- 合同协议类型
-INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('zh_CN', 'Labor Contract', 'hr.contract.agreement.category,name', 1, 'hr_contract_inherit', 'translated', '劳动合同', 'model', true);
-INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('en_US', 'Labor Contract', 'hr.contract.agreement.category,name', 1, 'hr_contract_inherit', 'translated', 'Labor Contract', 'model', true);
+INSERT INTO hr_contract_agreement_category (category, code, name, active) VALUES ('labor_contract', 'CN01', 'Labor Contract', true);
+INSERT INTO hr_contract_agreement_category (category, code, name, active) VALUES ('agreement', 'CN02', 'None Disclosure Agreement', true);
+INSERT INTO hr_contract_agreement_category (category, code, name, active) VALUES ('agreement', 'CN03', 'Competitive Restriction', true);
+INSERT INTO hr_contract_agreement_category (category, code, name, active) VALUES ('agreement', 'CN04', 'Service Agreement', true);
 
-INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('zh_CN', 'None Disclosure Agreement', 'hr.contract.agreement.category,name', 2, 'hr_contract_inherit', 'translated', '保密协议', 'model', true);
-INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('en_US', 'None Disclosure Agreement', 'hr.contract.agreement.category,name', 2, 'hr_contract_inherit', 'translated', 'None Disclosure Agreement', 'model', true);
+-- hr_cost_center
+UPDATE ir_model_data SET module='hr_base' WHERE module='hr_cost_center' AND model='ir.model.fields';
+DELETE FROM ir_model_data WHERE model='ir.model' AND module='hr_cost_center';
 
-INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('zh_CN', 'Competitive Restriction', 'hr.contract.agreement.category,name', 3, 'hr_contract_inherit', 'translated', '竟业协议', 'model', true);
-INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('en_US', 'Competitive Restriction', 'hr.contract.agreement.category,name', 3, 'hr_contract_inherit', 'translated', 'Competitive Restriction', 'model', true);
+-- 岗位职级调整
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) SELECT 'zh_CN', 'Active', 'ir.ui.view,arch_db', i1.id, 'patch_menu_management', 'translated', '在职', 'model', TRUE FROM ir_ui_view i1 WHERE name='rank.job.transfer.team.search.view';
 
-INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('zh_CN', 'Service Agreement', 'hr.contract.agreement.category,name', 4, 'hr_contract_inherit', 'translated', '服务期协议', 'model', true);
-INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) VALUES ('en_US', 'Service Agreementt', 'hr.contract.agreement.category,name', 4, 'hr_contract_inherit', 'translated', 'Service Agreement', 'model', true);
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) SELECT 'zh_CN', 'Inactive', 'ir.ui.view,arch_db', i1.id, 'patch_menu_management', 'translated', '离职', 'model', TRUE FROM ir_ui_view i1 WHERE name='rank.job.transfer.team.search.view';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) SELECT 'zh_CN', 'In Approval', 'ir.ui.view,arch_db', i1.id, 'patch_menu_management', 'translated', '待审批', 'model', TRUE FROM ir_ui_view i1 WHERE name='rank.job.transfer.team.search.view';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) SELECT 'zh_CN', 'Approved', 'ir.ui.view,arch_db', i1.id, 'patch_menu_management', 'translated', '已批准', 'model', TRUE FROM ir_ui_view i1 WHERE name='rank.job.transfer.team.search.view';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) SELECT 'zh_CN', 'Rejected', 'ir.ui.view,arch_db', i1.id, 'patch_menu_management', 'translated', '已拒绝', 'model', TRUE FROM ir_ui_view i1 WHERE name='rank.job.transfer.team.search.view';
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) SELECT 'zh_CN', 'Cancelled', 'ir.ui.view,arch_db', i1.id, 'patch_menu_management', 'translated', '已撤回', 'model', TRUE FROM ir_ui_view i1 WHERE name='rank.job.transfer.team.search.view';
+
+
+INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) SELECT 'zh_CN', 'Organizational Adjustment', 'ir.ui.view,arch_db', i1.id, 'hr_rank_job_transfer', 'translated', '岗位职级调整', 'model', true FROM ir_ui_view i1 WHERE key='hr_rank_job_transfer.report_rank_job_transfer';
+
+--INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) SELECT 'zh_CN', 'Termination', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '员工离职', 'model', true FROM ir_ui_view i1 WHERE key='employee_dimission.report_hr_termination';
+
+--INSERT INTO ir_translation (lang, src, name, res_id, module, state, value, type, is_customer) SELECT 'zh_CN', 'Termination', 'ir.ui.view,arch_db', i1.id, 'employee_dimission', 'translated', '员工离职', 'model', true FROM ir_ui_view i1 WHERE key='employee_dimission.report_dimission_summary';
 
 -- 合同&协议模板
 UPDATE ir_translation SET is_customer=false WHERE src='Contract Template' AND name in ('ir.ui.menu,name', 'ir.actions.act_window,name') AND module='eroad_template';
@@ -140,6 +152,11 @@ DELETE FROM ir_model_data WHERE module='hr_cost_center' AND model='ir.ui.view' A
 
 -- 修改初始化数据所属 module
 UPDATE ir_model_data SET module='hr_base' WHERE module='hr_cost_center' AND model in ('ir.cron', 'cost.center.type', 'ir.ui.menu');
+-- 更新字段所属模块
+UPDATE ir_model_data SET module='hr_base' WHERE module='hr_cost_center' AND model='ir.model.fields';
+-- 删除多余翻译
+DELETE FROM ir_translation WHERE module='hr_cost_center';
+
 
 SELECT * FROM ir_translation T INNER JOIN ir_model S ON T.res_id=S.id WHERE S.model='hr.contract' AND T.src='Contract' AND T.lang='zh_CN';
 UPDATE ir_translation SET module='hr_contract_inherit' WHERE res_id=(SELECT id FROM ir_model WHERE model='hr.contract');
@@ -156,14 +173,6 @@ WHERE i1.model='hr.employee' AND i1.name='employee_type_rep' AND i2.model='hr.em
 insert into import_fields (unique_index, field_type, create_if_not_find, sequence, required, field_id, relation_field, import_model_id) select true , 'many2one', false, 23 , true , i1.id , i2.id , i3.id from ir_model_fields i1, ir_model_fields i2, import_excel i3 where i1.model='hr.employee' AND i1.name='employee_type_rep' and i2.model='hr.employee.type' AND i2.name='name' and i3.name='基本信息';
 
 insert into import_fields (unique_index, field_type, create_if_not_find, sequence, required, field_id, relation_field, import_model_id) select true as unique_index, 'many2one' as field_type, false as create_if_not_find, 23 as sequence , true as required, i1.id as field_id, i2.id as relation_field, i3.id as import_model_id from ir_model_fields i1, ir_model_fields i2, import_excel i3 where i1.model='hr.employee' AND i1.name='employee_type_rep' and i2.model='hr.employee.type' AND i2.name='name' and i3.name='基本信息';
-
-SELECT * FROM ir_model_fields 
-WHERE model IN ('hr.contract', 'employee.dimission', 'hr.termination', 'employee.rank.adjust', 'job.transfer', 'employee.probation') 
-AND name='dep_manager';
--- 修改字段关联关系
-UPDATE ir_model_fields SET related='department_id.manager_id' 
-WHERE model IN ('hr.contract', 'employee.dimission', 'hr.termination', 'employee.rank.adjust', 'job.transfer', 'employee.probation') 
-AND name='dep_manager';
 
 
 -- employee_dimission
@@ -261,30 +270,7 @@ SELECT
     create_uid, create_date, write_uid, write_date, active
 FROM hr_termination WHERE name IN ('eh201612131038', 'eh201612131040', 'eh201612131039');
 
---3.建立 hr_termination 与 dimission_summar 关联
-UPDATE hr_termination SET dimission_summary_id=S.id
-FROM (SELECT id, termination_id, name FROM dimission_summary WHERE is_hr_termination=True) S
-WHERE hr_termination.id=S.termination_id AND S.name in ('eh201612131038', 'eh201612131040', 'eh201612131039');
-
-
-UPDATE company_record SET res_model='hr.termination' res_id=S.id
-FROM (SELECT id FROM hr_termination WHERE name='eh201612131038') S
-WHERE company_record.event_type='leave' 
-AND employee_id=(SELECT employee_id from employee_dimission WHERE name='eh201612131038');
-
-UPDATE company_record SET res_model='hr.termination' res_id=S.id
-FROM (SELECT id FROM hr_termination WHERE is_hr_termination=True) S
-WHERE company_record.event_type='leave' 
-AND employee_id IN (SELECT employee_id from employee_dimission WHERE name IN ('eh201612131038', 'eh201612131039', 'eh201612131040'));
-
-
--- 更新 action_code
-update import_excel set action_code='# Available variables' where model_id=(select id from ir_model where model='employee.dimission');
-
-
 -- 翻译
-UPDATE ir_translation SET value='组织单元' WHERE lang='zh_CN' AND src='Org Unit' AND module='employee_dimission' AND value='部门';
-
 UPDATE ir_translation SET value=replace(value, ' has rejected the termination request', '拒绝了您提交的的员工离职申请') WHERE position('has rejected the termination request' in src)>0 AND lang='zh_CN'; 
 
 UPDATE ir_translation SET value=replace(value, ' has submitted a termination request', '提交了员工离职申请') WHERE position('has submitted a termination request' in src)>0 AND lang='zh_CN'; 
