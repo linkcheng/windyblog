@@ -44,6 +44,11 @@ import matplotlib.pyplot as plt
    np.asarray()  # 将输入装换为 ndarray，如果输入本身就是一个 ndarray 就不进行复制
    arr.astype(np.float64) # arr = np.array(range(10)), 将 arr 整型转换为浮点型；
    # 调用 astype 无论如何都会创建出一个新的数组(原始数组的一份拷贝)，即使 dtype 跟老数组移植
+   data = np.random.randn(3, 4)  # 3 行 4 列的正太分布的随机矩阵
+   names = np.array(['Bob', 'Joe', 'Will'])
+   data[names=='Bob'] # 取 data 中第一列，data[names!='Bob']  等效为 data[-(names=='Bob')]，
+   # 可以使用 & | ！，and or 无效
+   arr = np.arange(32).reshape((8, 4))
    ```
 
    ```
