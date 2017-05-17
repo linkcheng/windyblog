@@ -645,6 +645,31 @@ def validate(self, signal):
    self.ids
    self.pool
 
+  self._columns[field]._type = 'many2one'
+  self._columns[field]
+  _auto_join
+  _classic_read
+  _classis_write
+  _context
+  _deprecated
+  _domain
+  _multi
+  _obj = 'hr.department'  # 关联模型
+  _prefetch
+  _properies
+  _symbol_c
+  _symbol_get
+  _symbol_set
+  _type
+  change_default
+  copy
+  deprecated
+  group_operator
+  groups
+  help
+  ```
+
+
    # self.env
    self.env.context
    self.env.cr
@@ -655,7 +680,7 @@ def validate(self, signal):
 41. Mac 安装 pymssql               
 
 
-```shell
+​```shell
 FreeTDS
 brew install freetds  # brew unlink freetds; brew install homebrew/versions/freetds091
 
@@ -664,7 +689,7 @@ pip install cython
 
 pyssql
 pip install pysmsql 
-```
+  ```
 
 42.    在 XML 中，有 5 个预定义的实体引用：
 
@@ -835,4 +860,93 @@ def trans_pwd(cls, pwd):
     password = password.translate(dict(zip(forbidden, [None] * len(forbidden))))
     return password
 ```
+
+51. dict 默认值
+
+```python
+values = {}
+for element in iterable:
+    values.setdefault(element, []).append(other_value)
+```
+
+52. 上线步骤
+
+        # 1、安装模块
+        # 2、升级模块
+        # 3、卸载模块
+        # 4、升级后执行SQL语句
+        # 5、加载指定数据文件
+        # 6、加载系统翻译
+        # 7、运行function tool函数 
+
+53.cProfile
+
+```python
+class profile(object):
+    def __init__(self, fname=None):
+        self.fname = fname
+
+    def __call__(self, f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            profile = cProfile.Profile()
+            result = profile.runcall(f, *args, **kwargs)
+            profile.dump_stats(self.fname or ("%s.cprof" % (f.func_name,)))
+            return result
+
+        return 
+    
+def profile_timer(f):
+    """
+    print_stats(sort)
+    sort 排序参数
+    -1: "stdname",
+    0:  "calls",
+    1:  "time",
+    2:  "cumulative"
+
+    :param f:
+    :return:
+    """
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        profile = cProfile.Profile()
+        result = profile.runcall(f, *args, **kwargs)
+        # profile.dump_stats("%s.cprof" % (f.func_name,))
+        profile.print_stats(2)
+        return result
+
+    return wrapper
+
+@profile_timer
+def home_employee_count_record(self):
+    pass
+
+@profile()
+def home_employee_count_record(self):
+    pass
+```
+
+
+
+可视化工具依赖木块：
+
+brew install qcachegrind
+
+brew install graphviz
+
+pyprof2calltree -k -i ***.cprof 
+
+54. sql 之 update
+
+    ```sql
+    UPDATE table1 alias
+    SET (column_name,column_name ) = (
+    SELECT (column_name, column_name)
+    FROM table2
+    WHERE column_name = alias.column_name)
+    WHERE column_name = VALUE
+    ```
+
+    ​
 
