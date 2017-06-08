@@ -1,0 +1,12 @@
+员工证明接口
+1. 证明类型
+2. 语言 default  all
+3. 创建接口
+3.1 pdf 预览
+4. 打印机数量  printing.printer/ehr_items_get
+5. pdf 打印 report/print_document   get_pdf  model  id  占位符
+6. 发送邮件 report/email_send
+
+1.模板渲染
+2.模板运算符支持
+
