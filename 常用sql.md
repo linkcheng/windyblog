@@ -1,3 +1,46 @@
+-- 删除总表审批通知
+delete from approve_notify where model='dimission.summary' and record_id in (
+	select id from dimission_summary 
+		where id in (select dimission_summary_id from employee_dimission where state in ('reject', 'cancel'))
+		or id in (select dimission_summary_id from hr_termination where state in ('reject', 'cancel'))
+);
+
+-- 删除总表记录
+delete from dimission_summary 
+	where id in (select dimission_summary_id from employee_dimission where state in ('reject', 'cancel'))
+	or id in (select dimission_summary_id from hr_termination where state in ('reject', 'cancel'));
+
+-- 删除离职通知
+delete from approve_notify where model='hr.termination' and record_id in (
+	select id from hr_termination where state in ('reject', 'cancel')
+);
+
+delete from approve_notify where model='employee.dimission' and record_id in (
+	select id from employee_dimission where state in ('reject', 'cancel')
+);
+
+-- 删除离职记录
+delete from hr_termination where state in ('reject', 'cancel');
+delete from employee_dimission where state in ('reject', 'cancel');
+
+update mail_message set active=false where model='hr.expense.expense' and res_id in 
+(select id from hr_expense_expense where employee_id in (select id from hr_employee where employee_number like 'C%' or employee_number like 'X%') and sequence not in ('EA201706082634', 'EA201706072630'));
+
+update mail_followers set active=false where res_model='hr.expense.expense' and res_id in 
+(select id from hr_expense_expense where employee_id in (select id from hr_employee where employee_number like 'C%' or employee_number like 'X%') and sequence not in ('EA201706082634', 'EA201706072630'));
+
+update ir_model_data set name='placeholder_27', module='hr_base' where name='placeholder_01' and module='hr_employee_search_extension';
+
+DO $$
+BEGIN
+IF NOT EXISTS(SELECT * FROM app_action WHERE module = 'employee_certification' AND action='eHR://certification_create' AND model='employee.certification') THEN
+    INSERT INTO app_action (sequence, module_installed, module, icon_url, app_module, app_title, description, show_type, name, action, model)
+    VALUES (120, 't', 'employee_certification', '/eroad_app_action/static/src/img/show_create/certification_create.png', 'certification_create', 'Certification', '创建员工证明', 'show_create', '员工证明', 'eHR://certification_create', 'employee.certification');
+    INSERT INTO ir_translation (lang, src, name, res_id, state, value, type)
+    SELECT 'zh_CN', 'Certification', 'app.action,app_title', s.id, 'translated', '员工证明', 'model' FROM app_action s WHERE app_title='Certification';
+END IF;
+END $$;
+
 insert into app_action (sequence, module_installed, module, icon_url, app_module, app_title, description, show_type, name, action, model) 
 values (120, 't', 'employee_certification', '/eroad_app_action/static/src/img/show_create/certification_create.png', 'certification_create', 'Certification', '创建员工证明', 'show_create', '员工证明', 'eHR://certification_create', 'employee.certification');
 insert into ir_translation (lang, src, name, res_id, state, value, type) 

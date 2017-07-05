@@ -708,7 +708,7 @@ pip install pysmsql
             2.    personnel_detail_controller.py 是前后端通信的接口，通过参数类型定义具体 model 与方法，对外隐藏具体信息
                   3.    hr_termination.py 是 personnel.detail 的一个具体实例，按需重新字段或者方法
 
-44. xml 中搜索视图，多条件过滤时 domain 中默认 & 操作需要显示给出，即需要 `&amp;`
+44. xml 中搜索视图，多条件过滤时 domain 中默认 & 操作需要显示给出，即需要`&amp;`
 
   ```xml
 
@@ -948,5 +948,5 @@ pyprof2calltree -k -i ***.cprof
     WHERE column_name = VALUE
     ```
 
-    ​
+55. 对模型的某个关联字段做过滤条件，可以在form视图中的字段定义出，添加domain熟悉。
 
