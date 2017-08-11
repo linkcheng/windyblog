@@ -1,3 +1,20 @@
+update ir_model_data set module='resource' where name='field_resource_calendar_name';
+
+
+DO $$
+BEGIN
+IF EXISTS(SELECT * FROM information_schema.columns WHERE table_name='hr_remind_python_code') THEN
+	DELETE FROM ir_model_data WHERE model='ir.model.access' and res_id in (SELECT id FROM ir_model_access WHERE name='hr_remind_python_code');
+	DELETE FROM ir_model_access WHERE name='hr_remind_python_code';
+	DELETE FROM ir_model_data WHERE model='hr.remind.python.code';
+	DELETE FROM ir_model_fields WHERE model='hr.remind.python.code';
+	DELETE FROM ir_model_constraint WHERE name like 'hr_remind_python_code%';
+	DELETE FROM ir_model WHERE model='hr.remind.python.code';
+	ALTER TABLE hr_remind_config DROP COLUMN python_code;
+	DROP TABLE hr_remind_python_code;
+END IF;
+END $$;
+
 -- 删除总表审批通知
 delete from approve_notify where model='dimission.summary' and record_id in (
 	select id from dimission_summary 

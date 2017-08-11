@@ -948,5 +948,14 @@ pyprof2calltree -k -i ***.cprof
     WHERE column_name = VALUE
     ```
 
-55. 对模型的某个关联字段做过滤条件，可以在form视图中的字段定义出，添加domain熟悉。
+55. 对模型的某个关联字段做过滤条件，可以在form视图中的字段定义出，添加domain属性。
+
+    ```xml
+    <field name="country_id" required="1" options="{'no_create': True}"/>
+    <field name="city_id" domain="[('state_id.country_id', '=', country_id)]" options="{'no_create': True}"/>
+    ```
+
+    如果 domain 表达式用到前边的字段，且是做变量（country_id），则不应该用‘’引起来；
+
+    如果是当前类型的字段（'state_id.country_id'），应该引起来。
 
