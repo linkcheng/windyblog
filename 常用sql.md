@@ -1,5 +1,18 @@
-update ir_model_data set module='resource' where name='field_resource_calendar_name';
+mobile mobileuat ehr1 ehr2
 
+delete from ir_translation where id in (select id from ir_translation where name='placeholder.template,content' and module='employee_certification' and res_id=1 and lang='zh_CN' order by id desc limit 1);
+
+其他客户生产
+select count(id) from ir_translation where name='placeholder.template,content' and module='employee_certification' and res_id=1 and lang='zh_CN';
+
+select count(id) from ir_translation where name='placeholder.template,content' and module='employee_certification' and res_id=1 and lang='en_US';
+
+
+update mail_message set model='hr.remind.config' where model='hr.remind';
+update mail_message set res_id=(select id from hr_remind_config order by id asc limit 1) where model='hr.remind.config';
+
+
+update ir_model_data set module='resource' where name='field_resource_calendar_name';
 
 DO $$
 BEGIN

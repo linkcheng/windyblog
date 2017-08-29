@@ -1,54 +1,36 @@
 # Odoo 笔记
 
 1. i18n 书写格式：
-```
-#. module: hr_base
-#: model:ir.actions.act_window,name:hr_base.action_bank_type_view
-#: model:ir.model,name:hr_base.model_bank_identification_number_type
-#: model:ir.model.fields,field_description:hr_base.field_bank_account_information_bank_identification_number_type
-#: model:ir.ui.menu,name:hr_base.bank_identification_number_type_menu
-#: model:ir.ui.view,arch_db:hr_base.bank_identification_number_type_view_form
-#: model:ir.ui.view,arch_db:hr_base.bank_identification_number_type_view_tree
-msgid "Bank Identification Number Type"
-msgstr "金融机构识别码类型"
 
-#. module: employee_dimission
-#: selection:employee.dimission,state:0
-#: selection:hr.dimission,state:0
-msgid "Draft"
-msgstr "草稿"
+   ```po
+   #. module: hr_base
+   #: model:ir.actions.act_window,name:hr_base.action_bank_type_view
+   #: model:ir.model,name:hr_base.model_bank_identification_number_type
+   #: model:ir.model.fields,field_description:hr_base.field_bank_account_information_bank_number_type
+   #: model:ir.ui.menu,name:hr_base.bank_identification_number_type_menu
+   #: model:ir.ui.view,arch_db:hr_base.bank_identification_number_type_view_form
+   msgid "Bank Identification Number Type"
+   msgstr "金融机构识别码类型"
 
-#. module: hr_rank_job_transfer
-#: model:ir.ui.view,arch_db:hr_rank_job_transfer.report_rank_job_transfer
-msgid "<span>Effective Date</span>"
-msgstr "<span>生效日期</span>"
+   #. module: employee_dimission
+   #: selection:employee.dimission,state:0
+   msgid "Draft"
+   msgstr "草稿"
 
-#. module: hr_rank_job_transfer
-#: model:ir.actions.act_window,name:hr_rank_job_transfer.action_rank_job_transfer_view
-#: model:ir.actions.report.xml,name:hr_rank_job_transfer.action_report_rank_job_transfer
-#: model:ir.ui.menu,name:hr_rank_job_transfer.menu_rank_job_transfer
-#: model:ir.model,name:hr_rank_job_transfer.model_rank_job_transfer
-#: model:ir.ui.view,arch_db:hr_rank_job_transfer.rank_job_transfer_form_view
-#: model:ir.ui.view,arch_db:hr_rank_job_transfer.rank_job_transfer_tree_view
-msgid "Organizational Adjustment"
-msgstr "岗位职级调整"
+   #. module: hr_rank_job_transfer
+   #: model:ir.actions.report.xml,name:hr_rank_job_transfer.action_report_rank_job_transfer
+   msgid "Organizational Adjustment"
+   msgstr "岗位职级调整"
 
-#. module: hr_base
-#: model:ir.model,name:hr_base.model_employee_birthday_wish_config  ; model 名称
-#: model:ir.actions.act_window,name:hr_base.action_employee_birthday_wish_config  
-; action ，model="ir.actions.act_window"
-#: model:ir.ui.menu,name:hr_base.menu_employee_birthday_wish_config ; 菜单
-#: model:ir.ui.view,arch_db:hr_base.employee_birthday_wish_config_form_view  ; 视图
-msgid "Employee Birthday Wishes Config"
-msgstr "员工生日祝福"
+   #. module: hr_base
+   #: code:addons/hr_base/hr_base_models.py:32
+   #: sql_constraint:unit.type:0  # sql提示语句翻译
+   #, python-format
+   msgid "Org unit type code repeat !"
+   msgstr "编码重复！"
+   ```
 
-#. module: hr_base
-#: code:addons/hr_base/hr_base_models.py:32
-#: sql_constraint:unit.type:0  # sql提示语句翻译
-#, python-format
-msgid "Org unit type code repeat !"
-msgstr "编码重复！"
-```
+
 2. One2many:会默认对应tree视图，即使不自己写
 
 3. 初始化数据，通常是在 data/ 目录下，通过 xml 或者 json文件的方式。xml 中通过方式添加。noupdate="1"。
@@ -104,166 +86,164 @@ msgstr "编码重复！"
 
 10. 使用logging模块记录后台行为日志
 
-```python
-import logging 
-_logger = logging.getLogger(__name__) 
-… 
-_logger.warning('Validate Error!') 
-```
+   ```py
+   import logging 
+   _logger = logging.getLogger(__name__) 
+   … 
+   _logger.warning('Validate Error!') 
+   ```
+
 
 11. 删除约束关系 ： 
 
-```sql
-ALTER TABLE "import_fields" DROP CONSTRAINT "import_fields_import_field_id_unique";
-```
+    ```sql
+    ALTER TABLE "import_fields" DROP CONSTRAINT "import_fields_import_field_id_unique";
+    ```
 
 12.    数据库查询 select语句：SELECT  * from table_name where id='id';
 
 13. 修改数据：
 
-  ```sql
-  UPDATE ir_translation SET value='员工标签' WHERE lang='zh_CN' and src='Categories' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='category_ids' and model='hr.employee');
-  ```
-  ```
-
-  ```
+   ```sql
+   UPDATE ir_translation SET value='员工标签' WHERE lang='zh_CN' and src='Categories' and module='hr_base' and res_id=(SELECT id FROM ir_model_fields WHERE name='category_ids' and model='hr.employee');
+   ```
 
 14. 数据库左连接查询：
 
-  ```sql
-  """ SELECT fol.id,fol.res_model,fol.res_id FROM mail_followers fol LEFT JOIN mail_followers_mail_message_subtype_rel rel ON fol.id=rel.mail_followers_id WHERE rel.mail_message_subtype_id=%s AND fol.active=TRUE AND fol.partner_id=%s AND fol.write_date <= %s""" % (attention_id, partner_id, deadline_date)
-  ```
+   ```sql
+   """ SELECT fol.id,fol.res_model,fol.res_id FROM mail_followers fol LEFT JOIN mail_followers_mail_message_subtype_rel rel ON fol.id=rel.mail_followers_id WHERE rel.mail_message_subtype_id=%s AND fol.active=TRUE AND fol.partner_id=%s AND fol.write_date <= %s""" % (attention_id, partner_id, deadline_date)
+   ```
 
 15. write 方法重写：
 
-  ```python
-  @api.one
-  def write(self, val):
-      result = super(all_form_design_menu, self).write(val)
-      if self.menu_id:
-          menu_var = self.env['ir.ui.menu'].browse(self.menu_id.id)
-          menu_var.write({'name': self.name})
-          return result
-  ```
+   ```python
+   @api.one
+   def write(self, val):
+       result = super(all_form_design_menu, self).write(val)
+       if self.menu_id:
+           menu_var = self.env['ir.ui.menu'].browse(self.menu_id.id)
+           menu_var.write({'name': self.name})
+           return result
+   ```
 
 16. 添加 function tool，在 debug 模式下，添加 function tool item，model 为 all.form.design，类型为 method，方法名称为：add_state_change_date_field
 
-  ```python
-  @api.model
-  def add_state_change_date_field(self):
-      # 用来处理旧的e表单数据没有x_state_change_date字段的问题；需要添加列也需要添加字段
-      form_design_objs = self.env['all.form.design'].search([])
-      for form_design_obj in form_design_objs:
-          has_state_change_date = filter(lambda x: x.name in ['x_state_change_date'], 					form_design_obj.ir_model_id.field_id)
-          if not has_state_change_date:
-              query = 'alter table %s add x_state_change_date date;' % 										form_design_obj.ir_model_id.model
-              self._cr.execute(query)
-              vals = {
-                  'model': form_design_obj.ir_model_id.model,
-                  'model_id': form_design_obj.ir_model_id.id,
-                  'name': 'x_state_change_date',
-                  'ttype': 'date',
-                  'field_description': _('Date of state change'),
-              }
-              self.env['ir.model.fields'].create(vals)
+   ```python
+   @api.model
+   def add_state_change_date_field(self):
+       # 用来处理旧的e表单数据没有x_state_change_date字段的问题；需要添加列也需要添加字段
+       form_design_objs = self.env['all.form.design'].search([])
+       for form_design_obj in form_design_objs:
+           has_state_change_date = filter(lambda x: x.name in ['x_state_change_date'], 					form_design_obj.ir_model_id.field_id)
+           if not has_state_change_date:
+               query = 'alter table %s add x_state_change_date date;' % 										form_design_obj.ir_model_id.model
+               self._cr.execute(query)
+               vals = {
+                   'model': form_design_obj.ir_model_id.model,
+                   'model_id': form_design_obj.ir_model_id.id,
+                   'name': 'x_state_change_date',
+                   'ttype': 'date',
+                   'field_description': _('Date of state change'),
+               }
+               self.env['ir.model.fields'].create(vals)
 
-  ```
-  ```xml
-  <?xml version="1.0" encoding="UTF-8"?>
-      <openerp>
-        <data noupdate="1">
-          <record id="all_form_design_func" model="function_tool">
-            <field name="model">all.form.design</field>
-            <field name="table">all_form_design</field>
-            <field name="method">add_state_change_date_field</field>
-            <field name="type">method</field>
-        </record>
-      </data>
-  </openerp>
-  ```
+   ```
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+       <openerp>
+         <data noupdate="1">
+           <record id="all_form_design_func" model="function_tool">
+             <field name="model">all.form.design</field>
+             <field name="table">all_form_design</field>
+             <field name="method">add_state_change_date_field</field>
+             <field name="type">method</field>
+         </record>
+       </data>
+   </openerp>
+   ```
 
-  ​
+   ​
 
 17. 旧API接口调用新API接口函数，需要补齐 **cr, uid, context=None** 三个参数
 
 18. self.ensure_one()
 
-  ```python
-  """checks that the recordset is a singleton (only contains a single record), raises an error otherwise:"""
-  records.ensure_one()
-  # is equivalent to but clearer than:
-  assert len(records) == 1, "Expected singleton"
-  ```
+   ```python
+   """checks that the recordset is a singleton (only contains a single record), raises an error otherwise:"""
+   records.ensure_one()
+   # is equivalent to but clearer than:
+   assert len(records) == 1, "Expected singleton"
+   ```
 
 19. 确保入参是 list 类型
 
-  ```python
-   if isinstance(ids, (int,long)): 
-   	ids = [ids]
-  ```
+   ```python
+    if isinstance(ids, (int,long)): 
+    	ids = [ids]
+   ```
 
 20. Odoo 对象成员赋值 （=）时会调用 write 方法，可以通过中间变量代替：
 
-  ```python
-  instance = self.env[attention['res_model']].browse(attention['res_id'])
-  # instance.state_change_date = instance.write_date ， 修改为以下代码
-  instance_state_change_date = instance.state_change_date
-  if not instance_state_change_date:
-      instance_state_change_date = instance.write_date
-  ```
+   ```python
+   instance = self.env[attention['res_model']].browse(attention['res_id'])
+   # instance.state_change_date = instance.write_date ， 修改为以下代码
+   instance_state_change_date = instance.state_change_date
+   if not instance_state_change_date:
+       instance_state_change_date = instance.write_date
+   ```
 
 21. 手动调用 query = 'alter table x_fx__2016_0015 add x_state_change_date date;' 与 self.env['ir.model.fields'].create(vals) 方式添加一列与一个字段，列名称（字段名称）必须以 **x_** 开头。
 
 22. 翻译问题，比如动态model名称，_(‘Description’) 类型，可以通过导出po文件查看，然后进行修改。_() 函数会调用po文件所对应的翻译。
 
-  ```po
-   #. module: all_form_design
-   #: code:addons/all_form_design/all_form_design.py:1765
-   #, python-format
-   msgid "Date of state change"
-   msgstr "状态变更日期"
-  ```
+   ```po
+    #. module: all_form_design
+    #: code:addons/all_form_design/all_form_design.py:1765
+    #, python-format
+    msgid "Date of state change"
+    msgstr "状态变更日期"
+   ```
 
 23. xml 继承拓展问题：
 
-  ```xml
-  <record id="view_form_department_inherited" model="ir.ui.view">
-    <field name="name">Hr department inherited Form</field>
-    <field name="model">hr.department</field>
-    <field name="inherit_id" ref="hr_base.view_department_form"/>
-    <!-- ref 表示要扩招的xml record_id -->
-    <field name="arch" type="xml">
-      <field name="company_id" position="after">
-        <!-- name 表示要扩招的xml field_id, position 表示下边的field所要添加的位置 -->
-        <field name="department_color" />
-      </field>
-    </field>
-  </record>
-  ```
+   ```xml
+   <record id="view_form_department_inherited" model="ir.ui.view">
+     <field name="name">Hr department inherited Form</field>
+     <field name="model">hr.department</field>
+     <field name="inherit_id" ref="hr_base.view_department_form"/>
+     <!-- ref 表示要扩招的xml record_id -->
+     <field name="arch" type="xml">
+       <field name="company_id" position="after">
+         <!-- name 表示要扩招的xml field_id, position 表示下边的field所要添加的位置 -->
+         <field name="department_color" />
+       </field>
+     </field>
+   </record>
+   ```
 
 24. 取today的方法
 
-  ```python
-  # 1.   
-  from openerp import fields
-  from openerp.fields import Date
-  today = fields.date.context_today(self, cr, uid, context=context) # 旧API，# (日期时间)
-  today = Date.from_string(Date.today())
-  # 2.    
-  from datetime import date
-  today = date.today()
-  # 3.    
-  import datetime
-  today = datetime.datetime.strptime(fields.Date.context_today(self), '%Y-%m-%d')
-  today = datetime.datetime.today().strftime("%Y-%m-%d")
+   ```python
+   # 1.   
+   from openerp import fields
+   from openerp.fields import Date
+   today = fields.date.context_today(self, cr, uid, context=context) # 旧API，# (日期时间)
+   today = Date.from_string(Date.today())
+   # 2.    
+   from datetime import date
+   today = date.today()
+   # 3.    
+   import datetime
+   today = datetime.datetime.strptime(fields.Date.context_today(self), '%Y-%m-%d')
+   today = datetime.datetime.today().strftime("%Y-%m-%d")
 
-  now_time = datetime.datetime.now()  # (only日期)
-  now_time_str = now_time.strftime('%Y-%m-%d %H:%M:%S')
-  today = now_time.strftime('%Y-%m-%d')
-  # 4.   
-  yesterday = (datetime.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
-  tomorrow = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
-  ```
+   now_time = datetime.datetime.now()  # (only日期)
+   now_time_str = now_time.strftime('%Y-%m-%d %H:%M:%S')
+   today = now_time.strftime('%Y-%m-%d')
+   # 4.   
+   yesterday = (datetime.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
+   tomorrow = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+   ```
 
 25. 定时任务
 
@@ -313,40 +293,40 @@ ALTER TABLE "import_fields" DROP CONSTRAINT "import_fields_import_field_id_uniqu
 
 27. sql 递归查询
 
-```sql
-SELECT emp.id, emp.name, dep.id as department_id, dep.name as department_name, 
-  dep.parent_id as parent_department,dep.manager_id as manager_id, 
-  dep.now_num as department_number,col.color_code as color,
-  emp.image_small_url as image_url,emp.job_id,job.name as job_name,
-  emp.manager,emp.work_phone,emp.work_email,emp.employee_number
-FROM hr_department dep
-  LEFT JOIN hr_employee emp on emp.id=dep.manager_id
-  LEFT JOIN display_color col on dep.department_color=col.id
-  LEFT JOIN hr_job job on emp.job_id=job.id
-WHERE dep.id IN
-  (WITH RECURSIVE r AS (
-    SELECT * FROM hr_department WHERE id=81
-    UNION ALL
-    SELECT hr_department.* FROM hr_department, r WHERE hr_department.parent_id = r.id AND
-    hr_department.is_in_use=True
-    )
-  SELECT id FROM r ORDER BY id);
-```
+  ```sql
+  SELECT emp.id, emp.name, dep.id as department_id, dep.name as department_name, 
+    dep.parent_id as parent_department,dep.manager_id as manager_id, 
+    dep.now_num as department_number,col.color_code as color,
+    emp.image_small_url as image_url,emp.job_id,job.name as job_name,
+    emp.manager,emp.work_phone,emp.work_email,emp.employee_number
+  FROM hr_department dep
+    LEFT JOIN hr_employee emp on emp.id=dep.manager_id
+    LEFT JOIN display_color col on dep.department_color=col.id
+    LEFT JOIN hr_job job on emp.job_id=job.id
+  WHERE dep.id IN
+    (WITH RECURSIVE r AS (
+      SELECT * FROM hr_department WHERE id=81
+      UNION ALL
+      SELECT hr_department.* FROM hr_department, r WHERE hr_department.parent_id = r.id AND
+      hr_department.is_in_use=True
+      )
+    SELECT id FROM r ORDER BY id);
+  ```
 
-> WITH RECURSIVE 是递归查询
+  > WITH RECURSIVE 是递归查询
 
-第一步  SELECT * FROM hr_department WHERE id=81 ，并放在 r 中。
+  第一步  SELECT * FROM hr_department WHERE id=81 ，并放在 r 中。
 
-第二步  SELECT hr_department.* FROM hr_department, r WHERE hr_department.parent_id = r.id AND
-​    hr_department.is_in_use=True   放入 r 中。 
+  第二步  SELECT hr_department.* FROM hr_department, r WHERE hr_department.parent_id = r.id AND
+  ​    hr_department.is_in_use=True   放入 r 中。 
 
-第三步 不断循环第二步，直到遍历 hr_department 所有记录。
+  第三步 不断循环第二步，直到遍历 hr_department 所有记录。
 
-第四步 UNION ALL。取 1 2 3 步 并集，保留重复记录。
+  第四步 UNION ALL。取 1 2 3 步 并集，保留重复记录。
 
-> LEFT JOIN 是左连接；
+  > LEFT JOIN 是左连接；
 
-LEFT JOIN 关键字会从左表 (hr_department) 那里返回所有的行，即使在右表 (hr_employee) 中没有匹配的行。在某些数据库中， LEFT JOIN 称为 LEFT OUTER JOIN。
+  LEFT JOIN 关键字会从左表 (hr_department) 那里返回所有的行，即使在右表 (hr_employee) 中没有匹配的行。在某些数据库中， LEFT JOIN 称为 LEFT OUTER JOIN。
 
 28. function 字段
 
@@ -614,60 +594,60 @@ def validate(self, signal):
 
 39. 对象属性类型
 
-  ```python
-  record._columns['approver_ids']._type  # 属性基本类型(field)，为字段类型
-  record._columns['approver_ids']._obj   # 属性数据类型(model)，为model名
-  ```
+   ```python
+   record._columns['approver_ids']._type  # 属性基本类型(field)，为字段类型
+   record._columns['approver_ids']._obj   # 属性数据类型(model)，为model名
+   ```
 
 40. self
 
-  ```python
-   # self
-   self.__last_update # 具体record才有
-   self._columns # model 所有属性，即列
-   self._all_columns # 同上
-   self._context # 环境变量 context
-   self._cr 
-   self._default # 字段默认值
-   self._description # model 的 description
-   self._fields # 所有字段
-   self._ids 
-   self._inherit
-   self._inherits
-   self._name
-   self._model
-   self._module
-   self._rec_name
-   self._table # 对应数据表名称
-   self._uid
-   self.env
-   self.id
-   self.ids
-   self.pool
+   ```python
+    # self
+    self.__last_update # 具体record才有
+    self._columns # model 所有属性，即列
+    self._all_columns # 同上
+    self._context # 环境变量 context
+    self._cr 
+    self._default # 字段默认值
+    self._description # model 的 description
+    self._fields # 所有字段
+    self._ids 
+    self._inherit
+    self._inherits
+    self._name
+    self._model
+    self._module
+    self._rec_name
+    self._table # 对应数据表名称
+    self._uid
+    self.env
+    self.id
+    self.ids
+    self.pool
 
-  self._columns[field]._type = 'many2one'
-  self._columns[field]
-  _auto_join
-  _classic_read
-  _classis_write
-  _context
-  _deprecated
-  _domain
-  _multi
-  _obj = 'hr.department'  # 关联模型
-  _prefetch
-  _properies
-  _symbol_c
-  _symbol_get
-  _symbol_set
-  _type
-  change_default
-  copy
-  deprecated
-  group_operator
-  groups
-  help
-  ```
+   self._columns[field]._type = 'many2one'
+   self._columns[field]
+   _auto_join
+   _classic_read
+   _classis_write
+   _context
+   _deprecated
+   _domain
+   _multi
+   _obj = 'hr.department'  # 关联模型
+   _prefetch
+   _properies
+   _symbol_c
+   _symbol_get
+   _symbol_set
+   _type
+   change_default
+   copy
+   deprecated
+   group_operator
+   groups
+   help
+   ```
 
 
    # self.env
@@ -710,113 +690,113 @@ pip install pysmsql
 
 44. xml 中搜索视图，多条件过滤时 domain 中默认 & 操作需要显示给出，即需要`&amp;`
 
-  ```xml
+   ```xml
 
-   <record model="ir.ui.view" id="rank_job_transfer_search_view">
-     <field name="name">rank.job.transfer.search</field>
-     <field name="model">rank.job.transfer</field>
-     <field name="arch" type="xml">
-       <search string="Organizational Adjustment">
-         <field name="employee_name"/>
-         <field name="employee_number"/>
-         <field name="employee_id" string="UserName" filter_domain="[('employee_id.user_id.login','ilike',self)]"/>
-         <field name="department_id" string="Org Unit"/>
-         <field name="job_id" string="Job"/>
-         <field name="transfer_date"/>
-         <field name="state"/>
-         <filter name="active_employee" string="Active" domain="['&', ('employee_id.work_activity', '=', 'in_service'), ('employee_id.active', '=', True)]"/>
-         <filter name="inactive_employee" string="Inactive" domain="['&',('employee_id.work_activity', '=', 'turn_over'), ('employee_id.active', '=', True)]"/>
-       </search>
-     </field>
-   </record>
-  ```
+    <record model="ir.ui.view" id="rank_job_transfer_search_view">
+      <field name="name">rank.job.transfer.search</field>
+      <field name="model">rank.job.transfer</field>
+      <field name="arch" type="xml">
+        <search string="Organizational Adjustment">
+          <field name="employee_name"/>
+          <field name="employee_number"/>
+          <field name="employee_id" string="UserName" filter_domain="[('employee_id.user_id.login','ilike',self)]"/>
+          <field name="department_id" string="Org Unit"/>
+          <field name="job_id" string="Job"/>
+          <field name="transfer_date"/>
+          <field name="state"/>
+          <filter name="active_employee" string="Active" domain="['&', ('employee_id.work_activity', '=', 'in_service'), ('employee_id.active', '=', True)]"/>
+          <filter name="inactive_employee" string="Inactive" domain="['&',('employee_id.work_activity', '=', 'turn_over'), ('employee_id.active', '=', True)]"/>
+        </search>
+      </field>
+    </record>
+   ```
 
 45. search 视图
 
-  ```xml
+   ```xml
 
-   <record id="rank_job_transfer_team_search_view" model="ir.ui.view">
-     <field name="name">rank.job.transfer.team.search.view</field>
-     <field name="model">rank.job.transfer</field>
-     <field name="priority">32</field>
-     <field name="arch" type="xml">
-       <search>
-         <field name="employee_id" invisible="1"/>
-         <filter name="active_employee" string="Active" domain="[('employee_id.work_activity', '=', 'in_service'), ('employee_id.active', '=', True)]"/>
-         <filter name="inactive_employee" string="Inactive" domain="[('employee_id.work_activity', '=', 'turn_over'), ('employee_id.active', '=', True)]"/>
-         <separator/> <!-- 分割条件 上下部分各自为或关系-->
-         <filter string="In Approval" name="state1" domain="[('state','=','waiting'),('approver_ids','=',uid)]" />
-         <filter string="Approved" name="state2" domain="[('state','=','done')]" />
-         <filter string="Rejected" name="state3" domain="[('state','=','reject')]" />
-         <filter string="Cancelled" name="state4" domain="[('state','=','cancel')]" />
-         <filter string="Rollback" name="state5" domain="[('state','=','rollback')]" />
-       </search>
-     </field>
-   </record>
+    <record id="rank_job_transfer_team_search_view" model="ir.ui.view">
+      <field name="name">rank.job.transfer.team.search.view</field>
+      <field name="model">rank.job.transfer</field>
+      <field name="priority">32</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="employee_id" invisible="1"/>
+          <filter name="active_employee" string="Active" domain="[('employee_id.work_activity', '=', 'in_service'), ('employee_id.active', '=', True)]"/>
+          <filter name="inactive_employee" string="Inactive" domain="[('employee_id.work_activity', '=', 'turn_over'), ('employee_id.active', '=', True)]"/>
+          <separator/> <!-- 分割条件 上下部分各自为或关系-->
+          <filter string="In Approval" name="state1" domain="[('state','=','waiting'),('approver_ids','=',uid)]" />
+          <filter string="Approved" name="state2" domain="[('state','=','done')]" />
+          <filter string="Rejected" name="state3" domain="[('state','=','reject')]" />
+          <filter string="Cancelled" name="state4" domain="[('state','=','cancel')]" />
+          <filter string="Rollback" name="state5" domain="[('state','=','rollback')]" />
+        </search>
+      </field>
+    </record>
 
-   <record model="ir.ui.view" id="rank_job_transfer_search_view">
-     <field name="name">rank.job.transfer.search</field>
-     <field name="model">rank.job.transfer</field>
-     <field name="arch" type="xml">
-       <search string="Organizational Adjustment">
-         <field name="employee_name"/>
-         <field name="employee_number"/>
-         <field name="employee_id" string="UserName" filter_domain="[('employee_id.user_id.login','ilike',self)]"/>
-         <field name="department_id" string="Org Unit"/>
-         <field name="job_id" string="Job"/>
-         <field name="transfer_date"/>
-         <field name="state"/>
-         <filter name="active_employee" string="Active" domain="[('employee_id.work_activity', '=', 'in_service'), ('employee_id.active', '=', True)]"/>
-         <filter name="inactive_employee" string="Inactive" domain="[('employee_id.work_activity', '=', 'turn_over'), ('employee_id.active', '=', True)]"/>
-       </search>
-     </field>
-   </record>
+    <record model="ir.ui.view" id="rank_job_transfer_search_view">
+      <field name="name">rank.job.transfer.search</field>
+      <field name="model">rank.job.transfer</field>
+      <field name="arch" type="xml">
+        <search string="Organizational Adjustment">
+          <field name="employee_name"/>
+          <field name="employee_number"/>
+          <field name="employee_id" string="UserName" filter_domain="[('employee_id.user_id.login','ilike',self)]"/>
+          <field name="department_id" string="Org Unit"/>
+          <field name="job_id" string="Job"/>
+          <field name="transfer_date"/>
+          <field name="state"/>
+          <filter name="active_employee" string="Active" domain="[('employee_id.work_activity', '=', 'in_service'), ('employee_id.active', '=', True)]"/>
+          <filter name="inactive_employee" string="Inactive" domain="[('employee_id.work_activity', '=', 'turn_over'), ('employee_id.active', '=', True)]"/>
+        </search>
+      </field>
+    </record>
 
-   <record model="ir.actions.act_window" id="action_rank_job_transfer_view">
-     <field name="name">Organizational Adjustment</field>
-     <field name="type">ir.actions.act_window</field>
-     <field name="res_model">rank.job.transfer</field>
-     <field name="view_type">form</field>
-     <field name="view_mode">tree,form,pivot,graph</field>
-     <field name="context">{'search_default_active_employee': 1, 'all_employee': 1, 'readonly_bypass': True}</field>
-   </record>
-   <!-- search_default_active_employee 默认搜索为 search视图中，field name 是 active_employee 的-->
-  ```
+    <record model="ir.actions.act_window" id="action_rank_job_transfer_view">
+      <field name="name">Organizational Adjustment</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">rank.job.transfer</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form,pivot,graph</field>
+      <field name="context">{'search_default_active_employee': 1, 'all_employee': 1, 'readonly_bypass': True}</field>
+    </record>
+    <!-- search_default_active_employee 默认搜索为 search视图中，field name 是 active_employee 的-->
+   ```
 
 46. 模块文件整理检查
 
-  ```shell
-   find ehr_addons -name *.xml | xargs grep 'model="eroad.menu.access.list"' > ~/Desktop/check_files.log
-   awk '/\/data\//{print $1}' ~/Desktop/check_files.log 
-  ```
+   ```shell
+    find ehr_addons -name *.xml | xargs grep 'model="eroad.menu.access.list"' > ~/Desktop/check_files.log
+    awk '/\/data\//{print $1}' ~/Desktop/check_files.log 
+   ```
 
 47. many2many 计算失效用户
 
-  ```python
-  (lenenterprise_chat_record.with_context(active_test=False).participants)
-  ```
+   ```python
+   (lenenterprise_chat_record.with_context(active_test=False).participants)
+   ```
 
 48. sql 查询部门员工数
 
-  ```sql
-   -- 递归查询，包含子部门人数
-   sql = """UPDATE hr_department dep SET now_num=(SELECT count(id) From hr_employee AS emp
-   WHERE emp.work_activity='in_service' AND emp.active=TRUE AND emp.department_id in
-   (WITH RECURSIVE r AS (
-   SELECT * FROM hr_department WHERE id=dep.id
-   UNION ALL
-   SELECT hr_department.* FROM hr_department, r WHERE hr_department.parent_id = r.id AND hr_department.active=True
+   ```sql
+    -- 递归查询，包含子部门人数
+    sql = """UPDATE hr_department dep SET now_num=(SELECT count(id) From hr_employee AS emp
+    WHERE emp.work_activity='in_service' AND emp.active=TRUE AND emp.department_id in
+    (WITH RECURSIVE r AS (
+    SELECT * FROM hr_department WHERE id=dep.id
+    UNION ALL
+    SELECT hr_department.* FROM hr_department, r WHERE hr_department.parent_id = r.id AND hr_department.active=True
 
-   SELECT id FROM r ORDER BY id)
-   )
-   RETURNING id,now_num
-   """
-   --只包含当前部门人数
-   sql = """UPDATE hr_department dep SET now_num=(SELECT count(id) From hr_employee AS emp
-   WHERE emp.work_activity='in_service' AND emp.active=TRUE AND emp.department_id=dep.id)
-   RETURNING id,now_num
-   """
-  ```
+    SELECT id FROM r ORDER BY id)
+    )
+    RETURNING id,now_num
+    """
+    --只包含当前部门人数
+    sql = """UPDATE hr_department dep SET now_num=(SELECT count(id) From hr_employee AS emp
+    WHERE emp.work_activity='in_service' AND emp.active=TRUE AND emp.department_id=dep.id)
+    RETURNING id,now_num
+    """
+   ```
 
 49. many2many
           (0,0,{values}) 根据values里面的信息新建一个记录。
@@ -958,4 +938,71 @@ pyprof2calltree -k -i ***.cprof
     如果 domain 表达式用到前边的字段，且是做变量（country_id），则不应该用‘’引起来；
 
     如果是当前类型的字段（'state_id.country_id'），应该引起来。
+
+56. 字段校验处理
+
+    取这个小标题其实有点不太贴切。 其实我想描述的是对一个（或多个）字段做onchange事件，onchange方法中对字段值进行了有效性校验。
+
+    onchange被触发，引发弹错误提示框，这都没问题。 但是如果当你的焦点不在onchange相关的字段上时。这是即使你违反了字段值的有效性，也能继续保存，不会激活onchange方法。
+
+    这里有三种处理方法：
+
+    1. 当违反onchange中的检验逻辑时，就置空相应的自段值，让其重填。 
+    2. 在保存时再写一次检验逻辑。（create 与 write需要分别重写，出于一些原因，代码可能不能共用）【这算是最不好的方式】
+    3. 写一个 **_constraints **对相关字段进行约束。 （odoo 9 中**constraints **的弹框提示不再有那些多余的文字了，福音啊） 
+
+57. 新建与编辑的限制
+
+    当需求遇到新建字段无限制，而编辑是不能对字段做操作时。这时需要对字段做条件限制。 这里需要用id,且针对id的写法很固定（所以记下来，避免记不住花时间试）
+
+    ```
+     <field name="id" invisible="1"/>
+    ```
+
+    ```
+     <field name="name" attrs="{'readonly': [('id','!=',False)]}"/>
+    ```
+
+58. many2one字段不可编辑与新建
+
+    many2one 与 selection 的异同
+
+    相同： 都是一个下拉选
+
+    差异： selection 的数据后台定死，前端界面没有入口新增，编辑删除这些操作。
+
+    ​            many2one 的字段在下拉选中支持搜索，新建，编辑功能。
+
+    odoo 的 many2one 默认实现方便了某些操作。但是可能违背了某些业务性的操作(many2one 字段不需要新建、编辑操作)，此时可以在该字段上加属性让展示方式跟selection类似。
+
+    在many2one字段的选择时，如果不允许呈现对已经有的选项打开详情编辑，可以在该字段的view上加一个属性：
+
+    ​    options="{'no_create': True, 'no_open': True}"
+
+    或者加 widget="selection"
+
+59. domain 使用
+
+    domain 中写表达式的写法已近烂大街了，这里不需要介绍。
+
+    在某些业务情况下，需要对many2one 的字段做过滤，当要求是不能在 python 文件中 以字符串的方式过滤（因为多语言支持时，字符串可能被翻译）时，这是怎么来写这个domain 呢？
+
+    这是就需要用domain 接方法的形式了。形如这样：
+
+    ```
+    @api.model
+    def _get_domain(self):
+        # We have access to self.env in this context.
+      uom_categ_ids = self.env.ref('hr_holiday_management.holiday_uom_categ_wtime').ids
+        ids = self.env['product.uom'].search([('category_id', 'in', uom_categ_ids)]).ids
+        return [('id', 'in', ids)]
+    ```
+
+    ```
+    product_uom_id = fields.Many2one('product.uom', string=u'时间单位', required=True, domain=_get_domain)
+    ```
+
+    ps: 某些情况下，也可以通过onchange 来返回一个domain 条件
+
+    ​
 
